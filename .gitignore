@@ -2,7 +2,7 @@ paket.exe
 Paket.Restore.targets
 paket.targets
 report/packages
-report/paket_files
+report/paket-files
 *.aux
 *.log
 *.out
