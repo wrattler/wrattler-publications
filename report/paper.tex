@@ -350,11 +350,11 @@ the course of an analysis, each of which specialize in a single kind of task.
 
 \subsection{Architecture of AI assistants}
 
-<<<<<<< HEAD
 There are two important design aspects of AI assistants, which may seem
 contradictory.
  First, they must be interactive, following
  the first principle behind Wrattler, but
+ following the second,
  they must also be reproducible.
 We square this circle by using the notebook
 system as a reproducible interlingua.
@@ -364,13 +364,12 @@ and it is this code that is agreed between the AI and the analyst during the int
 Thus the interaction is viewed as a ``design phase''
 that is not reproduced on new data.
 
-An AI assistant defines a domain specific language (DSL) for the task at hand. When invoked from
+More specifically, an AI assistant defines a domain specific language (DSL) for the task at hand. When invoked from
 a notebook, it guides the user in creating a script in the DSL. Running the script performs
 the required operation (such as data cleaning). The assistant defines the semantics
 of those operations and, when the script is executed, stores the result into a data
 store. This new data frame can contain new data or additional information (such as their
 inferred probabilistic type).
-
 The interaction is illustrated in Figure~\ref{fig:arch}. An AI assistant reads data from the data
 store and returns suggestions to the notebook, which the user can review and accept.
 
@@ -416,11 +415,11 @@ from the analyst. For example, a data cleaning assistant would probably want to 
 confirm potential changes, and if the user says no, to reconfigure the cleaning module
 significantly so that the user does not need to keep rejecting similar changes.
 
-In the above example, the interaction is provied through the ``.'' operator of the scripting
+In the above example, the interaction is provided through the ``.'' operator of the scripting
 language. When the analyst types the first line to invoke the AI assistant and types ``.''
 the datadiff assistant offers the most likely patches and the user can choose which ones
-to accept. Scripts constructed in such way are readable, allowin the data analyst to look at them
-and verify that the transformations acomplish the intended task (such verification further
+to accept. Scripts constructed in such way are readable, allowing the data analyst to look at them
+and verify that the transformations accomplish the intended task (such verification further
 benefits from live previews that Wrattler provides when the analyst navigates through the
 individual transformations).
 
@@ -436,16 +435,15 @@ assistants have access to the data store and can use it to provide guidance abou
 code. Second, Wrattler includes an extensible framework for defining domain-specific languages
 (DSLs) that can describe, for example, data extraction, cleaning, transformation or visualization.
 The data store provides AI assistants with
-two information that can be used for providing analyst with guidance:
+two sources of information that they can exploit
+to determine what guidance to provide the analyst:
 %
-\begin{itemize}
 \begin{itemize}
 \item[--] AI assistants can access all data stored in the data
 store. This includes imported external data files, such as raw text or raw HTML content from which
 the analyst wants to extract data, as well as structured data frames imported from CSV files or
 produced as a result of previous computations. Moreover, an AI assistant can also access multiple
 versions of a file.
-\vspace{0.25em}
 
 \item[--] AI assistants can access the dependency graph created for a
 notebook. This allows the them to access the transformation history, which is the code
@@ -453,6 +451,7 @@ that has already been run during the analysis. The gives assistants information 
 context such as transformations that have already been performed.
 \end{itemize}
 
+\medskip \noindent
 The assistants should be self-contained in the sense that they interact with each other
 only through the
 data store. This restriction is necessary in order
@@ -583,8 +582,6 @@ Another potential avenue is explaining
 differences between predictions: why was instance 42 treated differently than instance 24601, even though they appear highly similar to a human?
 }
 
-\vspace*{1em}
-
 %%cs possibly we don't need to go into detail
 %% in this version of the report? Or we might
 %% decide to add this back.
@@ -686,10 +683,6 @@ Or perhaps better would be to allow drill down, i.e., to make it easy to explore
 the clusters represented by each example.
 }
 \end{comment}
-
-\newpage
-~
-\newpage
 
 \section{Data store}
 \label{sec:datastore}
