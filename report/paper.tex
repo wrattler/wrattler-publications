@@ -546,11 +546,10 @@ we discuss the structure of those annotations.
 \subsection{Semantic annotations}
 As noted in Section~\ref{sec:wrattler-ds}, annotations can be attached to individual cells, 
 entire columns and rows, but also combinations of multiple columns or rows. As an example,
-consider the following small table that records data on broadband speed (and illustrates a number
-of real-world problems):
+consider the following small table obtained from a government web site that records data 
+on broadband speed (and illustrates a number of real-world problems):
 
 \vspace{1em}
-\noindent
 \begin{tabular}{llc}
 \toprule
 \textbf{ISP}\qquad\qquad\qquad & \textbf{Postcode}\qquad\qquad & \textbf{Download} \\
@@ -558,37 +557,85 @@ of real-world problems):
 Virgin & CB43BE & 46.34 \\
 BT & CB43PT & N/A \\
 Virgin & NW53HL & 41.2 \\
-BT & Tottenham & 16.4 \\
+BT & London & 16.4 \\
 \bottomrule
 \end{tabular}
 \vspace{1em}
 
 \noindent
-If we run an AI asistant that performs probabilistic type inference (ptype) on this data set,
-it will annotate the table with a number of information:
+As a first step, the data analyst might use the probabilistic type inference (ptype) assistant
+in order to infer the types of data in the data set. The assistant needs to be able to annotate
+the table with the following information:
+%
 \begin{itemize}
-\item[--] aa
+\item[--] With high certainty, the ISP column is a categorical column with values Virgin and BT;
+  with lower certainty, it could also be a string.
+\item[--] The column Postcode is most likely a postcode; with lower probability it is a city name
+  and with similarly low probability, it is a plain string.
+\item[--] The column Download is most likely a number or a missing value represented as N/A.  
+\item[--] The N/A cell is annotated as being most likely a missing value, or less likely a plain 
+  string. Other cells of the Download column are annotated as most likely being decimal numbers.
+\item[--] The cells of the Postcode column are annotated similarly. The first three are most
+  likely postcodes, while the last one is most likely a city name, but all also have a non-zero
+  probability of being an arbitrary string.
 \end{itemize}
 
-{\color{red}
-Data store provides a way of annotating cells, columns, combinations of columns and rows.
-For example, a column may be annotated with a type that indicates that its values are a mix of
-postcodes and city names. A cell can be annotated with an information saying that this value is 
-more likely a postcode than a city name. We also need to support annotaitons on a combination of
-columns, because three columns can jointly represent an address. A row can be annotated with a 
-provenance -- for example, when merging rows from two data sets with different sources.
-}
+\noindent
+Assuming the data frame is extracted from a government web page, each row of the data set
+could further be annotated with the URL of the data source. This makes it possible to track
+provenance at a fine-grained level. If we then append two such data frames, we will know
+which row comes from which government data set.
+
+It is worth noting that the data store does not need to fully understand the semantics of such 
+annotations. The probabilistic type inference assistant simply adds them and another assistant
+can then clean the data and, for example, drop values that do not conform to the most 
+probable type. We return to this topic in Section~\ref{sec:datastore-schema}, after discussing
+the format of such annotations.
 
 \subsection{Annotation format}
-{\color{red}
-We want a lightweight annotation format so that implementing an AI assistant or a language
-runtime that needs to communicate with the data store is not too hard.
-Our annotation format will follow something like \url{http://schema.org}, which defines
-a hierarchy of entity types and has a simple way for adding annotations to things.
-We will need to define our own hierarchy for schemas for data science.
-}
+The format of annotations needs to be light-weight so that it can be easily consumed and produced
+by AI assistants created in a variety of different programming languages. For this reason, it is
+desirable to use a standard file format such as JSON or XML. Furthermore, the format needs to 
+be extensible -- although Wrattler should provide a schema for basic annotations, new AI assistants
+should be able to freely define and use new kinds of annotations.
+
+An annotation format that satisfies the above constraints can take inspiration from the 
+Schema.org project (\url{http://schema.org}), which provides a way of annotating web content
+with semantic information. The focus of Schema.org is on higher-level entities (such as 
+a person, an event or a place), rather than lower-level information, but the format itself could
+be reused by Wrattler.
+
+As an example, consider the following Schema.org description of a place (the following shows a
+JSON encoding, but it is worth noting that Schema.org also supports RDF encoding):
+%
+\begin{equation*}
+\begin{array}{l}
+\{~~\; \str{@context}: \str{http://schema.org},\\
+\quad  \str{@type}: \str{Place},\\
+\quad  \str{name}: \str{The Black Lodge},\\
+\quad  \str{address}: \{\\
+\qquad    \str{@type}: \str{PostalAddress},\\
+\qquad    \str{addressLocality}: \str{London},\qquad\qquad\qquad\qquad\qquad~\\
+\qquad    \str{postalCode}: \str{NW53HL} ~\}~\}\\
+\end{array}
+\end{equation*}
+
+\noindent
+The \str{@context} attribute defines a namespace of a schema that defines the available
+entities. The default namespace, used here, includes two entities that we use in this 
+example, namely Place and PostalAddress.
+
+The namespace mechanism provides a convenient way of extending annotations -- Wrattler can
+define a core schema for common information that it needs, but new AI assistants can 
+extend it via custom namespaces.
+
+The Schema.org format also makes it easy to attach additional information to an existing
+value. In the example above, the original value might have been ``The Black Lodge'', but 
+an AI assistant -- possibly using entity linkage -- inferred and extended it with postal address.
 
 \subsection{Schemas for data science}
+\label{sec:datastore-schema}
+
 {\color{red}
 This hierarchy will include some basic things that the data store understands and can 
 convert between (integers, floats, unbounded size integers, ISO dates, etc.)
