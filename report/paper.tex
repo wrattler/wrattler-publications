@@ -1,7 +1,7 @@
 \documentclass[sigplan,preprint,10pt]{acmart}\settopmatter{printfolios=true,printccs=false,printacmref=false}
-\settopmatter{printacmref=false} 
+\settopmatter{printacmref=false}
 \renewcommand\footnotetextcopyrightpermission[1]{}
-\pagestyle{plain} 
+\pagestyle{plain}
 
 \usepackage{lineno,hyperref,xcolor}
 \usepackage{flushend}
@@ -9,7 +9,7 @@
 \usepackage{amssymb}
 \usepackage{xypic}
 \usepackage{semantic}
-\usepackage{booktabs} 
+\usepackage{booktabs}
 \usepackage{subcaption}
 \usepackage{enumitem}
 \usepackage[shortlabels]{enumerate}
@@ -80,17 +80,17 @@
 \maketitle
 
 \section{Introduction}
-Data science is an iterative, exploratory process that requires a collaboration between a 
-computer system and a human. A computer can provide advice based on statistical analysis of the 
+Data science is an iterative, exploratory process that requires a collaboration between a
+computer system and a human. A computer can provide advice based on statistical analysis of the
 data and discover hidden structures or corner cases, but only a human can decide what those mean
 and decide how to handle them in data science scripts. Data science is often cited as an expensive
 and time consuming task, especially due the costs of data cleaning and data wrangling.
 We propose four fundamental reasons why
 practical data science is expensive:
 
-\paragraph{Big data is big,} 
+\paragraph{Big data is big,}
 so the analyst doesn't understand it all.*
-Even if a data set is small enough fits on one computer, it's still too large to fit in 
+Even if a data set is small enough fits on one computer, it's still too large to fit in
 an analyst's working memory.
 But this means every analysis is huanted
 by the spectre of lurking, potentially
@@ -98,23 +98,23 @@ unknown data quality  issues.
 This also makes it more difficult to do data fusion, because there may be corner cases that make it more difficult to join two disparate data sources than expected.
 
 \paragraph{The double Anna Karenina principle.}
-Not only is every dirty data set  dirty in its own way, but \emph{pace} Tolstoy, every clean data set is clean in its own way as well. 
+Not only is every dirty data set  dirty in its own way, but \emph{pace} Tolstoy, every clean data set is clean in its own way as well.
 "Data" is such an abstract concept that specific integrity conditions to characterize whether data is dirty, and potentially even the most appropriate formalism for integrity conditions,  differ dramatically across
 the vast array of disparate use cases of data science,
 ranging form relational data describing the customers of a country, time series data describing sensor data in an internet of things platform, and huge datasets of satellite imagery of the earth over a multi-year time scale.
 
-\paragraph{Death by a thousand cuts.} 
+\paragraph{Death by a thousand cuts.}
 Often data transformation and processing steps are individually  very simple. But  there may need to be lots of them, and
 because big data is big,
 an analyst never knows if she has found them all.
 
-\paragraph{Feedback cycles everywhere.} Data science is 
-not a pipeline but a connected mess of epicycles. This is because every step 
-in a data analysis actually teaches 
-the analyst more about the data and the problem, which might require rehtinking the earlier steps. 
-For example, there might be data quality issues that 
+\paragraph{Feedback cycles everywhere.} Data science is
+not a pipeline but a connected mess of epicycles. This is because every step
+in a data analysis actually teaches
+the analyst more about the data and the problem, which might require rehtinking the earlier steps.
+For example, there might be data quality issues that
 are not uncovered until the analyst
-investigates the output of a regression model. 
+investigates the output of a regression model.
 
 \vspace{1em}
 To meet these challenges, we present Wrattler,
@@ -127,20 +127,20 @@ with new advances in AI systems for data wrangling and in provenance.
 The main design principles in Wrattler are:
 
 \paragraph{Interactive.} Interactivity
-is a necessary because ``big data is big'', so the analyst learns about 
+is a necessary because ``big data is big'', so the analyst learns about
 the data set and the problem as she explores it.
 Wrattler enables an efficient interaction by bringing computation closer to the human.
 Notebooks run in the browser, cache partial results of computations and provide previews
 of script results on-the-fly during development.
 
-\paragraph{Reproducible.} 
+\paragraph{Reproducible.}
 Data analyses must be reproducible
 because of feedback cycles. As the
 analyst learns more about the problem,
 this may uncover data cleaning or preparation issues that require
 redesigning and rerunning the analysis.
-Wrattler separates the task of running scripts from the task of managing state. 
-This is handled by a data store, which tracks the provenance and semantics of data, supports 
+Wrattler separates the task of running scripts from the task of managing state.
+This is handled by a data store, which tracks the provenance and semantics of data, supports
 versioning and keeps the history, making the data analyses fully reproducible.
 
 \paragraph{Polyglot.}
@@ -161,15 +161,15 @@ big data is big.
 AI can be used to direct the analyst's attention and to generalize  decisions about data transformation
 to new data that that the analyst
 hasn't seen.
-Wrattler serves as a platform for AI assistants that use machine learning to provide suggestions 
-about data. Such AI assistants connect to the data store to infer types and meaning of data, provide 
-help with data cleaning and joining, but also help data exploration by finding typical and atypical 
+Wrattler serves as a platform for AI assistants that use machine learning to provide suggestions
+about data. Such AI assistants connect to the data store to infer types and meaning of data, provide
+help with data cleaning and joining, but also help data exploration by finding typical and atypical
 data points and automatically visualizing data.
 
 \paragraph{Explainable.}
-The hints provided by AI assistants are explainable. Rather than working as black boxes that 
+The hints provided by AI assistants are explainable. Rather than working as black boxes that
 transform one dataset into another, AI assistants generate scripts in simple domain-specific
-languages, that specify how the data should be transformed. Those scripts can be reviewed 
+languages, that specify how the data should be transformed. Those scripts can be reviewed
 and modified by a human.
 
 \vspace{0.5em}
@@ -184,16 +184,16 @@ how semantic information about data is managed by the data store (Section~\ref{s
 \section{Wrattler and notebooks}
 \label{sec:overview}
 
-Notebook systems such as Jupyter became a popular programming environment for data science, because 
-they support gradual data exploration and provide a convenient way of interleaving code with 
-comments and visualizations. However, notebooks suffer from a number of issues that hanper 
+Notebook systems such as Jupyter became a popular programming environment for data science, because
+they support gradual data exploration and provide a convenient way of interleaving code with
+comments and visualizations. However, notebooks suffer from a number of issues that hanper
 reproducibility and limit the possible interaction model.
 
-Notebooks can be used in a way that breaks reproducibility. The state is maintained by a \emph{kernel} 
-and running a code in a cell overwrites the current state. There is no record of how the current 
-state was obtained and no way to rollback to a previous state. The fact that the state is 
+Notebooks can be used in a way that breaks reproducibility. The state is maintained by a \emph{kernel}
+and running a code in a cell overwrites the current state. There is no record of how the current
+state was obtained and no way to rollback to a previous state. The fact that the state is
 maintained by the kernel means that it is hard to combine multiple programming languages and
-other components such as AI assistants. Finally, notebooks provide a very limited interaction 
+other components such as AI assistants. Finally, notebooks provide a very limited interaction
 model. To see the effect of a code change, an entire cell and all subsequent cells need to be
 manually reevalutated.
 
@@ -212,47 +212,48 @@ The architecture of Wrattler allows us to address these issues, as well as to pr
 for building novel AI assistants and interactive programming. The architecture is illustrated
 in Figure~\ref{fig:arch}. The components of Wrattler are:
 %
-\paragraph{Data store.} Imported external data, results of running scripts and of 
-applying AI assistants are stored in the data store. It stores versioned data frames with 
+\paragraph{Data store.} Imported external data, results of running scripts and of
+applying AI assistants are stored in the data store. It stores versioned data frames with
 metadata such as types, inferred semantics, data formats or provenance.
 
 \paragraph{Language runtimes.} Scripts are evaluated by one or more language runtimes.
 The runtimes read input data from and write results back to the data store.
 
 \paragraph{AI assistants.} When invoked from the notebook, AI assistants read data
-from data store and provide hints to the data analyst. They help to write data cleaning
-scripts or annotate data in the data store with additional metadata such as inferred types.
+from data store and provide hints to the analyst. They help to write data cleaning
+scripts or annotate data with additional metadata such as inferred types.
 
-\paragraph{Notebook.} The notebook is displayed in a web browser and orchestrates 
-all other components. The browser builds a dependency graph between cells or individual 
+\paragraph{Notebook.} The notebook is displayed in a web browser and orchestrates
+all other components. The browser builds a dependency graph between cells or individual
 expressions in the cells. It calls language runtimes to evaluate code that has changed,
-AI assistants to provide hints and reads data from the data store to display results.  
+AI assistants to provide hints and reads data from the data store to display results.
 
 \section{Wrattler components}
 \label{sec:wrattler}
 
-Wrattler consists of a notebook user interface running in the web browser, which communicates with 
-a number of server-side components including language runtimes, the data store and AI assistants. 
+Wrattler consists of a notebook user interface running in the web browser, which communicates with
+a number of server-side components including language runtimes, the data store and AI assistants.
 In this section, we discuss the components in more detail, starting with the dependency graph
-that is maintained on the client-side, by the web browser.
+that is maintained on the client-side, by the web browser. AI assistants are discussed later
+in Section~\ref{sec:ai}
 
 \subsection{Dependency graph}
 
-When opening a notebook, Wrattler parses the source of the notebook (consisting of text cells and 
+When opening a notebook, Wrattler parses the source of the notebook (consisting of text cells and
 code cells) and constructs a dependency graph, which serves as a runtime representation of the
-notebook. 
+notebook.
 
-The structure is ilustrated in Figure~\ref{fig:deps}. Top-level nodes (squares) represent
-individual notebook cells. Code (circles) is represented either as a single node (R, Python) or as 
-a sub-graph with node for each operation (DSLs understood by Wrattler). Any node of a cell can 
-depend on a data frame (hexagons) exported by an earlier cell. 
-When code in a cell changes, Wrattler updates the dependency graph, keeping existing
-nodes for entities that were unaffected by the change. 
+As an example, the graph in Figure~\ref{fig:deps} represents the notebook in Figure~\ref{fig:notebook}.
+Top-level nodes (squares) represent individual notebook cells. Code (circles) is represented either as
+a single node (Python, JavaScript) or as a sub-graph with node for each operation (cleaning DSL
+understood by Wrattler). Any node of a cell can depend on a data frame (hexagons) exported by an
+earlier cell. When code in a cell changes, Wrattler updates the dependency graph, keeping existing
+nodes for entities that were unaffected by the change.
 
 The dependency graph enables several features that are difficult for most notebook systems:
 %
 \begin{itemize}
-\item[--] When code changes, Wrattler only needs to recompute small part of the graph.
+\item[--] When code changes, Wrattler only needs to recompute a small part of the graph.
   This makes it possible to provide live previews, especially for simple data analytical DSLs.
 \vspace{-0.85em}
 \item[--] Refactoring can extract parts of the notebook that
@@ -265,11 +266,12 @@ The dependency graph enables several features that are difficult for most notebo
 \end{itemize}
 
 \subsection{Data store}
+\label{sec:wrattler-ds}
 
-The data store provides a way for persistently stroing data and enables communication between 
+The data store provides a way for persistently stroing data and enables communication between
 individual Wrattler components. Data store keeps external data files imported into Wrattler,
-as well as computed data frames (and, potentially, other data structures). It is immutable 
-and keeps past versions of data to allow efficient state rollback. For persistency and versioning, 
+as well as computed data frames (and, potentially, other data structures). It is immutable
+and keeps past versions of data to allow efficient state rollback. For persistency and versioning,
 data store also serializes and stores multiple versions of the dependency graph.
 
 The data store supports a mechanism for annotating data frames with additional semantic information, such as:
@@ -282,78 +284,55 @@ The data store supports a mechanism for annotating data frames with additional s
 \item[--] Columns, rows and cells of the data frame can be annotated with other metadata such as provenance.
 \end{itemize}
 
-\subsection{Language runtimes}
+\noindent
+The format of the annotations as well as other features of the data store are discussed in
+more detail in Section~\ref{sec:datastore}.
 
-Language runtimes are responsible for evaluating code and assisting with code analysis during
-the construction of dependency graph. They can run as server-side components (e.g.~for R and Python) 
-or as client-side components (for JavaScript and small analytical DSLs used by AI assistants). 
-Unlike Jupyter kernels, a language runtime is stateless. It reads data from and writes data to
-the data store. (Using a cache for efficiency.)
-
-
+\begin{figure}
+\begin{equation*}
+\begin{array}{l}
+\textit{\small{We retrieve data from a government web site using Python:}}\\[0.3em]
+\quad\ident{url}=\ident{open}(\str{http://data.gov.uk/\ldots/bb2014.csv})\\
+\quad\ident{bbRaw}=\ident{csv.reader}(\ident{url})\\[0.2em]
+\textit{\small{In the next block, we used an AI assistant to assist with cleaning}}\\[-0.1em]
+\textit{\small{and created a script that marks \#!NULL values as missing:}}\\[0.3em]
+\quad\kvd{let}~\ident{bbClean} = \ident{bbRaw}.\ident{missing}.\ident{as\_missing}(\str{\#!NULL})\\[0.3em]
+\textit{\small{Finally, we use JavaScript to create a histogram of upload speeds:}}\\[0.3em]
+\quad\ident{vega}.\ident{hsit}(\ident{bbClean}, \str{Upload speed})
+\end{array}
+\end{equation*}
+\vspace{-0.5em}
+\caption{\small{A small notebook consisting of three cells. The first Python cell exports
+\ident{bbRaw}; the second Wrattler cell uses it and exports \ident{bbClean} and the
+JavaScript cell visualizes \ident{bbClean}.}}
+\label{fig:notebook}
+\end{figure}
 \begin{figure}
 \includegraphics[scale=1,trim=0.5cm 0.5cm 0.5cm 0.5cm]{graph.pdf}
 
-\caption{\small{Sample dependency graph. Data acquisiton and analysis are represented as 
-opaque R/Python code cells. Data cleaning is written in a domain-specific langauge understood by
-Wrattler and represented by multiple cells. Latter two cells depend on data frames exported by
-earlier cells.}}
+\caption{\small{Dependency graph for the notebook in Figure~\ref{fig:notebook}.
+Data acquisition is represented as a single Python cell. Data cleaning is understood
+by Wrattler and is the graph has a node for each call and constant. Hexagons represent
+data frames shared by cell and stored in the data store.}}
 \label{fig:deps}
 \vspace{-0.5em}
 \end{figure}
 
-\subsection{AI assistants}
-\label{sec:wrattler-ai}
+\subsection{Language runtimes}
 
-The Wrattler architecture enables integration of AI assistants in a number of ways. First, AI
-assistants have access to the data store (and the dependency graph) and can use those to provide
-guidance about both data and code. Second, Wrattler includes an extensible framework for defining
-domain-specific languages (DSLs) that can describe, for example, data extraction, cleaning, transofrmation or 
-visualization. An AI assistant can work in two ways:
-%
-\begin{itemize}
-\item[--] When invoked, the assistant creates a new frame in the data store with additional
-  information, e.g. probabilistic type inference (ptype) will annotate columns (and possibly
-  also cells) with their probabilistic types.
-\vspace{0.25em}
-\item[--] The assistant defines a DSL for the task at hand. When invoked from a notebook,
-  it guides the user in creating a script in the DSL that performs the required operation
-  (such as extracting data or reformatting a data frame).
-\end{itemize}
-%
-The second case is illustrated in Figure~\ref{fig:arch}. An AI assistant reads data from the data
-store and returns suggestions in a small DSL to the notebook, which the user can review 
-(using a live preview mechanism) and accept. For example, an AI
-assistant based on datadiff can suggest the following script (written using the Wrattler DSL
-framework):
-%
-\begin{equation*}
-\begin{array}{l}
-\ident{datadiff(broadband2014, broadband2015)}\\
-\quad.\ident{drop\_column}(\str{WT\_national})\\
-\quad.\ident{drop\_column}(\str{WT\_ISP})\\
-\quad.\ident{recode\_column}(\str{URBAN}, [\num{1}, \num{2}], [\str{Urban},\str{Rural}])
-\end{array}  
-\end{equation*}
-%
-The script specifies that two columns should be dropped from the badly structured data frame and
-one column needs to be recoded (turning $\num{1}$ and $\num{2}$ into strings
-\strf{Urban} and \strf{Rural}).
-
-The above script is constructed interactively. When the user types the first line and types
-``.'' the datadiff assistant offers the most likely patches and the user can choose. While
-choosing, a preview of the result is computed on-the-fly, giving the user an immediate feedback.
-Finally, the script is represented in a fine-grained way (second cell in Figure~\ref{fig:deps}).
-Once it is interactively constructed, it can be translated to multiple supported languages
-such as R, Python or JavaScript.
+Language runtimes are responsible for evaluating code and assisting with code analysis during
+the construction of dependency graph. They can run as server-side components (e.g.~for R and Python)
+or as client-side components (for JavaScript and small analytical DSLs used by AI assistants).
+Unlike Jupyter kernels, a language runtime is stateless. It reads data from and writes data to
+the data store. (Using a cache for efficiency.)
 
 \section{AI assistants}
 \label{sec:ai}
 
 {
 An AI assistant is a component
-of the system that 
-guides data analysts through a single data collection, integration, preparation, 
+of the system that
+guides data analysts through a single data collection, integration, preparation,
 analytics, or reporting task.
 For example, an assistant might
 specialize in identifying suspicious
@@ -366,55 +345,100 @@ of the data to the analyst, based on combinations
 of statistical and symbolic AI analysis,
 and then refine the transformation
 based on feedback from the analyst.
-Typically analysts will interact with many separate assistants over 
+Typically analysts will interact with many separate assistants over
 the course of an analysis, each of which specialize in a single kind of task.
-}
+
 \subsection{Architecture of AI assistants}
 
-There are two important design aspects of AI assistants, which may seem 
+<<<<<<< HEAD
+There are two important design aspects of AI assistants, which may seem
 contradictory.
  First, they must be interactive, following
  the first principle behind Wrattler, but
  they must also be reproducible.
 We square this circle by using the notebook
-system as a reproducible interlingua. 
+system as a reproducible interlingua.
 The output of an AI assistant is always code, rather
 than being a black-box that transforms data,
 and it is this code that is agreed between the AI and the analyst during the interaction.
 Thus the interaction is viewed as a ``design phase''
 that is not reproduced on new data.
 
+An AI assistant defines a domain specific language (DSL) for the task at hand. When invoked from
+a notebook, it guides the user in creating a script in the DSL. Running the script performs
+the required operation (such as data cleaning). The assistant defines the semantics
+of those operations and, when the script is executed, stores the result into a data
+store. This new data frame can contain new data or additional information (such as their
+inferred probabilistic type).
+
+The interaction is illustrated in Figure~\ref{fig:arch}. An AI assistant reads data from the data
+store and returns suggestions to the notebook, which the user can review and accept.
+
 Assistants are therefore based on two different ideas:
 
 \paragraph{Domain specific languages.}
-The output of an assistant is code in a small domain-specific language designed for the task that
-the AI assistant is solving. The code can be used in two ways -- during the interaction with the
-AI assistant, the code is exposed through a Wrattler DSL framework as discussed in 
-Section~\ref{sec:wrattler-ai}. For production use, the code is translated to a language like R or 
-Python. A typical code produced by an AI assistant will implement a data transformation or
-produce a visualization.
+
+Wrattler includes a scripting language with simple syntax that is used by individual AI assistants
+to define domain specific languages. The syntax is shared across multiple AI assistnts, but the
+operations are provided by individual assistants.
+
+For example, an AI assistant based on datadiff
+guides the user in writing scripts that transform a malformed data frame into a correct format
+specified by a correct data frame. The resulting script might look as follows:
+%
+\begin{equation*}
+\begin{array}{l}
+\ident{datadiff(broadband2014, broadband2015)}\\
+\quad.\ident{drop\_column}(\str{WT\_national})\\
+\quad.\ident{drop\_column}(\str{WT\_ISP})\\
+\quad.\ident{recode\_column}(\str{URBAN}, [\num{1}, \num{2}], [\str{Urban},\str{Rural}])
+\end{array}
+\end{equation*}
+%
+The script specifies that two columns should be dropped from the badly structured data frame and
+one column needs to be recoded (turning $\num{1}$ and $\num{2}$ into strings
+\strf{Urban} and \strf{Rural}).
+
+The code produced by an AI assistant can be used in two ways. First, the analyst writes the code
+interactively during an interaction with the AI assistant. During this phase, Wrattler
+keeps a fine-grained representation of the code in the dependency graph (second cell in
+Figure~\ref{fig:deps}), which allows Wrattler to provie live previews of the result, giving the
+user an immediate feedback.
+
+At a later stage, when the code is used in production, the code can be translated to a language
+like R or Python. This translation uses the fine-grained representation of the code in the
+dependency graph and maps individual nodes to corresponding Python or R functions.
 
 \paragraph{Interactivity.}
-Assistants should usually contain user interaction in their design, and adapt rapidly to feedback 
-from the analyst. For example, a data cleaning assistant would probably want to ask the user to 
-confirm potential changes, and if the user says no, to reconfigure the cleaning module 
-significantly so that the user does not need to keep rejecting similar changes. 
 
-However, at the same time, our data preparation tools should be usable in "batch mode" by analysts 
-who already know what they want to do and don't want to mess with a wizard. We should aim to 
-produce the equivalent of scikit-learn for data preparation.
+Assistants should usually contain user interaction in their design, and adapt rapidly to feedback
+from the analyst. For example, a data cleaning assistant would probably want to ask the user to
+confirm potential changes, and if the user says no, to reconfigure the cleaning module
+significantly so that the user does not need to keep rejecting similar changes.
 
-The output snippet should be readable, and something that a data analyst can look at to verify 
-that the transformation accomplishes what they had wanted. As far as possible, the snippet 
-should be "reusable" in a sense that it could be copy-pasted into another script that was 
-processing a similar dataset and would still work. You can think of a snippet as something 
-that a person might write in a single cell of a Jupyter notebook.
+In the above example, the interaction is provied through the ``.'' operator of the scripting
+language. When the analyst types the first line to invoke the AI assistant and types ``.''
+the datadiff assistant offers the most likely patches and the user can choose which ones
+to accept. Scripts constructed in such way are readable, allowin the data analyst to look at them
+and verify that the transformations acomplish the intended task (such verification further
+benefits from live previews that Wrattler provides when the analyst navigates through the
+individual transformations).
 
+At the same time, AI assistants can be used in a fully automatic ``batch mode'' by analysts
+who already know what they want to achieve and know that the assistant produces the result they
+require. In this case, Wrattler will simply automatically accept the default recommendations made
+by an AI assistant. This allows packaging the assistant as an equivalent of scikit-learn for
+data preparation.
 
 \vspace{1em}
-AI assistants have access to information in the Wrattler data store and can use two separate
-aspects for their guidance:
+The Wrattler architecture supports the development of AI assistants in a number of ways. First, AI
+assistants have access to the data store and can use it to provide guidance about both data and
+code. Second, Wrattler includes an extensible framework for defining domain-specific languages
+(DSLs) that can describe, for example, data extraction, cleaning, transformation or visualization.
+The data store provides AI assistants with
+two information that can be used for providing analyst with guidance:
 %
+\begin{itemize}
 \begin{itemize}
 \item[--] AI assistants can access all data stored in the data
 store. This includes imported external data files, such as raw text or raw HTML content from which
@@ -423,14 +447,14 @@ produced as a result of previous computations. Moreover, an AI assistant can als
 versions of a file.
 \vspace{0.25em}
 
-\item[--] AI assistants can access the dependency graph created for a 
-notebook. This allows the them to access the transformation history, which is the code 
-that has already been run during the analysis. The idea is that assistants may need to know the 
-context of transformations that have already been performed in order to decide what to suggest next.
+\item[--] AI assistants can access the dependency graph created for a
+notebook. This allows the them to access the transformation history, which is the code
+that has already been run during the analysis. The gives assistants information about the
+context such as transformations that have already been performed.
 \end{itemize}
 
 The assistants should be self-contained in the sense that they interact with each other
-only through the 
+only through the
 data store. This restriction is necessary in order
 for provenance tracking and reproducibility.
 
@@ -439,16 +463,16 @@ for provenance tracking and reproducibility.
 \subsection{The Assistant Landscape}
 {
 
-AI assistants can be imagined for every step of the data analytics process. 
+AI assistants can be imagined for every step of the data analytics process.
 To give an idea of the breadth of this framework,
 we present a broad list of the data analytics tasks which have potential for assistant automation.
 This is an intentionally broad list, more so than
-could be fully explored in even a large research project, but gives a sense of the breadth of 
+could be fully explored in even a large research project, but gives a sense of the breadth of
 potential use cases of our framework.
 
 \paragraph{Data collection.} Assistants can search the data store, as well as external repositories
 to recommend data sets that are relevant to the task at hand and offer to import these. For example,
-when analysing data about different countries, 
+when analysing data about different countries,
 the assistant could suggest joining in public
 demographic information from DBPedia.
 
@@ -457,7 +481,7 @@ as it is difficult. We envisage assistants
 that combine logical and statistical reasoning to assist
 with data  integration. A simple but useful
 example of a tool in this space is to
- identifying pairs of variables across multiple data 
+ identifying pairs of variables across multiple data
 sources that are likely to be daily temperatures.
 More sophisticated examples could include and extend the
 most cutting edge techniques in the data fusion and
@@ -469,7 +493,7 @@ as we might like, even to the minimal level of
 documentation of the types of each column.
 There is an interesting opportunity to
 develop machine learning methods that inferring types of variables from their values, e.g.,
-by noticing that integer values between 0 and 30 in 
+by noticing that integer values between 0 and 30 in
 the United Kingdom might describe an outdoor temperature, especially if other weather-related
 variables are detected in the data set.
 
@@ -499,10 +523,10 @@ identifying distinct records that may refer to the same entity (record linkage).
 \paragraph{Data monitoring.} Once an analysis
 is completed, it may result in a machine learning
 model which will then be deployed on a data stream.
-Once a classifier is deployed, it must be monitored 
+Once a classifier is deployed, it must be monitored
 to detect shifts in its input distribution,
 such as change points, covariate shift, and
-concept drift. This includes the problem 
+concept drift. This includes the problem
 to suggesting when/how often new data points should be labelled for monitoring.
 Even for data analyses that do not involve
 deploying a ``production model'', there is
@@ -515,7 +539,7 @@ divergences from this assumption to indicate
 potential issues with data quality.
 As part of the Wrattler effort, we have
 introduced the \emph{data diff} problem \cite{datadiff},
-which aims to improve the process of data wrangling by 
+which aims to improve the process of data wrangling by
 returning a report of the differences between two data sets.
 
 \paragraph{Exploratory visualization} to summarize
@@ -546,7 +570,7 @@ debugging predictive analytics is notoriously difficult, and the remedies indire
  There is potentially low hanging fruit available
  in how to aid the tasks of
 error analysis, exploring the
-predictions of the model 
+predictions of the model
 on validation data. Some early work in this direction is
 \cite{saleema}.
 There is a rich and growing literature on
@@ -612,7 +636,7 @@ of my BSc/MSc students have found useful.
 *Inconsistent string assistant*: Identify potential typos in string data. The idea is to look for strings that do not occur commonly in the data set, but are very close in edit distance
 to strings that do occur commonly.
 
-* *Input*: A column of a data table whose values are strings, like addresses, cities, states/provinces, occupations, and so on. 
+* *Input*: A column of a data table whose values are strings, like addresses, cities, states/provinces, occupations, and so on.
 
 * *Output*: A list of suggestions for strings that should be renamed: e.g. `[ ("Stocland", "Scotland"), ("Untied Kringdom", "United Kingdom") ]`
 
@@ -639,7 +663,7 @@ for this, not sure about the edit distance one.
 columns of a given data frame. The number of rows in the summary should be small enough
 to fit on a given screen. Essentially an alternative to the `head()` function in pandas/R.
 
-*Input*:  A data frame, along with type information (continuous/categorical) for each of the columns. Desired number $k$ of rows in output. 
+*Input*:  A data frame, along with type information (continuous/categorical) for each of the columns. Desired number $k$ of rows in output.
 
 *Output*: A list of $k$ indices of rows in the dataframe
 
@@ -655,7 +679,7 @@ listing the institutions that have the most papers is most informative, because
 it's a "long tail" type of column. How do you tell "long tail" data from "just show
 the clusters" type data? Perhaps a model-based framework could distinguish?
 Maybe you want to summarize the ways in which two data sets differ?
-Is the best summary the cluster centroids or the "top k" along some value? 
+Is the best summary the cluster centroids or the "top k" along some value?
 * *User interaction:* I'm not sure what interactions are enecessary.
 Users could ask for more rows, mark two items as similar, or mark an item as uninteresting.
 Or perhaps better would be to allow drill down, i.e., to make it easy to explore
@@ -663,26 +687,66 @@ the clusters represented by each example.
 }
 \end{comment}
 
+\newpage
+~
+\newpage
+
 \section{Data store}
 \label{sec:datastore}
 
-{\color{red}
-\textbf{TP: My rough notes from discussion with JG}
+The data store links together individual components of Wrattler. It stores the raw input
+data for data analysis such as downloaded web pages, raw data frames and also data frames
+produced as the result of running a script or invoking an AI assistant. In addition to data,
+the data store also stores multiple versions of the dependency graph created by Wrattler.
 
-~
+In the initial version of Wrattler, we restrict the data storage to raw input files and
+data frames, however we note that it would be desirable to include other data structures
+such graph or network data.
+
+In this section, we focus on the initial functionality that is required from the data store.
+We focus on the public interface exposed by the data store, but We do not discuss the technolgy
+used for data storage -- this can be decided during the development.
+
+Data frames stored in the data store can be annotated with metadata. Such metadata can
+communicate information between multiple AI assistants. For example, first AI assistant can
+infer that a type of a pair of columns represents GPS coordinate and produce a data frame
+with annotations specifying this information. A second AI assistant can then use this information
+and automatically provide a data visualization in the form of map. In the rest of this section,
+we discuss the structure of those annotations.
+
+\subsection{Semantic annotations}
+As noted in Section~\ref{sec:wrattler-ds}, annotations can be attached to individual cells,
+entire columns and rows, but also combinations of multiple columns or rows. As an example,
+consider the following small table that records data on broadband speed (and illustrates a number
+of real-world problems):
+
+\vspace{1em}
+\noindent
+\begin{tabular}{llc}
+\toprule
+\textbf{ISP}\qquad\qquad\qquad & \textbf{Postcode}\qquad\qquad & \textbf{Download} \\
+\midrule
+Virgin & CB43BE & 46.34 \\
+BT & CB43PT & N/A \\
+Virgin & NW53HL & 41.2 \\
+BT & Tottenham & 16.4 \\
+\bottomrule
+\end{tabular}
+\vspace{1em}
 
 \noindent
-Data store stores data frames with metadata. This is a good start for data science work,
-because most languages can provide mappings to/from data frames.
-}
+If we run an AI asistant that performs probabilistic type inference (ptype) on this data set,
+it will annotate the table with a number of information:
+\begin{itemize}
+\item[--] aa
+\end{itemize}
 
-\subsection{Semantics annotations}
 {\color{red}
 Data store provides a way of annotating cells, columns, combinations of columns and rows.
 For example, a column may be annotated with a type that indicates that its values are a mix of
-postcodes and city names. A cell can be annotated with an information saying that this value is 
+postcodes and city names. A cell can be annotated with an information saying that this value is
 more likely a postcode than a city name. We also need to support annotaitons on a combination of
-columns, because three columns can jointly represent an address. A row can be annotated with a 
+columns, because three columns can jointly represent an address. A row can be annotated with a
 provenance -- for example, when merging rows from two data sets with different sources.
 }
 
@@ -697,10 +761,10 @@ We will need to define our own hierarchy for schemas for data science.
 
 \subsection{Schemas for data science}
 {\color{red}
-This hierarchy will include some basic things that the data store understands and can 
+This hierarchy will include some basic things that the data store understands and can
 convert between (integers, floats, unbounded size integers, ISO dates, etc.)
 
-In addition, we will define some purely semantic annotations that are commonly useful and 
+In addition, we will define some purely semantic annotations that are commonly useful and
 we will define a hierarchy for those. This represents things like addresses, postcodes, countries,
 cities, etc.
 
