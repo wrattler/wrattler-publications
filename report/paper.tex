@@ -83,7 +83,7 @@
 Data science is an iterative, exploratory process that requires a collaboration between a
 computer system and a human. A computer can provide advice based on statistical analysis of the
 data and discover hidden structures or corner cases, but only a human can decide what those mean
-and decide how to handle them in data science scripts. Data science is often cited as an expensive
+and decide how to handle them in scripts. Data science is often cited as an expensive
 and time consuming task, especially due the costs of data cleaning and data wrangling.
 We propose four fundamental reasons why
 practical data science is expensive:
@@ -117,6 +117,7 @@ are not uncovered until the analyst
 investigates the output of a regression model.
 
 \vspace{1em}
+\noindent
 To meet these challenges, we present Wrattler,
 a new type of system for data science
 that aims to transform the process
@@ -124,14 +125,14 @@ of data analysis.
 Wrattler combines the interactive and literal programming paradigms
 of notebook systems such as Jupyter
 with new advances in AI systems for data wrangling and in provenance.
-The main design principles in Wrattler are:
+The main design principles are:
 
 \paragraph{Interactive.} Interactivity
-is a necessary because ``big data is big'', so the analyst learns about
+is a necessary because ``big data is big''. The analyst learns about
 the data set and the problem as she explores it.
 Wrattler enables an efficient interaction by bringing computation closer to the human.
 Notebooks run in the browser, cache partial results of computations and provide previews
-of script results on-the-fly during development.
+of script results on-the-fly.
 
 \paragraph{Reproducible.}
 Data analyses must be reproducible
@@ -197,32 +198,25 @@ other components such as AI assistants. Finally, notebooks provide a very limite
 model. To see the effect of a code change, an entire cell and all subsequent cells need to be
 manually reevalutated.
 
-\begin{figure}
-\vspace{-0.5em}
-\includegraphics[scale=0.6]{diagram.pdf}
-\vspace{-0.5em}
-\caption{\small{In notebook systems such as Jupyter, state and execution is managed by a kernel. In
-  Wrattler, those functions are separated and enriched with AI assistants.}}
-\label{fig:arch}
-\vspace{-0.5em}
-\end{figure}
-
-
 The architecture of Wrattler allows us to address these issues, as well as to provide a platform
 for building novel AI assistants and interactive programming. The architecture is illustrated
 in Figure~\ref{fig:arch}. The components of Wrattler are:
-%
+
+\vspace{-0.25em}
 \paragraph{Data store.} Imported external data, results of running scripts and of
 applying AI assistants are stored in the data store. It stores versioned data frames with
 metadata such as types, inferred semantics, data formats or provenance.
 
+\vspace{-0.25em}
 \paragraph{Language runtimes.} Scripts are evaluated by one or more language runtimes.
 The runtimes read input data from and write results back to the data store.
 
+\vspace{-0.25em}
 \paragraph{AI assistants.} When invoked from the notebook, AI assistants read data
 from data store and provide hints to the analyst. They help to write data cleaning
 scripts or annotate data with additional metadata such as inferred types.
 
+\vspace{-0.25em}
 \paragraph{Notebook.} The notebook is displayed in a web browser and orchestrates
 all other components. The browser builds a dependency graph between cells or individual
 expressions in the cells. It calls language runtimes to evaluate code that has changed,
@@ -231,11 +225,10 @@ AI assistants to provide hints and reads data from the data store to display res
 \section{Wrattler components}
 \label{sec:wrattler}
 
-Wrattler consists of a notebook user interface running in the web browser, which communicates with
-a number of server-side components including language runtimes, the data store and AI assistants.
-In this section, we discuss the components in more detail, starting with the dependency graph
-that is maintained on the client-side, by the web browser. AI assistants are discussed later
-in Section~\ref{sec:ai}
+Wrattler consists of a user interface running in the web browser, which communicates with
+a number of server-side components. In this section, we discuss the components in more 
+detail, starting with the dependency graph that is maintained on the client-side, by the 
+web browser. AI assistants are discussed later in Section~\ref{sec:ai}.
 
 \subsection{Dependency graph}
 
@@ -265,6 +258,14 @@ The dependency graph enables several features that are difficult for most notebo
   or code cleanup.
 \end{itemize}
 
+\begin{figure}
+\includegraphics[scale=0.6]{diagram.pdf}
+\caption{\small{In notebook systems such as Jupyter, state and execution is managed by a kernel. In
+  Wrattler, those functions are separated and enriched with AI assistants.}}
+\label{fig:arch}
+\end{figure}
+
+
 \subsection{Data store}
 \label{sec:wrattler-ds}
 
@@ -291,7 +292,8 @@ more detail in Section~\ref{sec:datastore}.
 \begin{figure}
 \begin{equation*}
 \begin{array}{l}
-\textit{\small{We retrieve data from a government web site using Python:}}\\[0.3em]
+\textit{\small{In the first block, we retrieve data from a government web site.}}\\[-0.1em]
+\textit{\small{We use Python to download the data and parse it as a CSV file.}}\\[0.3em]
 \quad\ident{url}=\ident{open}(\str{http://data.gov.uk/\ldots/bb2014.csv})\\
 \quad\ident{bbRaw}=\ident{csv.reader}(\ident{url})\\[0.2em]
 \textit{\small{In the next block, we used an AI assistant to assist with cleaning}}\\[-0.1em]
@@ -307,22 +309,12 @@ more detail in Section~\ref{sec:datastore}.
 JavaScript cell visualizes \ident{bbClean}.}}
 \label{fig:notebook}
 \end{figure}
-\begin{figure}
-\includegraphics[scale=1,trim=0.5cm 0.5cm 0.5cm 0.5cm]{graph.pdf}
-
-\caption{\small{Dependency graph for the notebook in Figure~\ref{fig:notebook}.
-Data acquisition is represented as a single Python cell. Data cleaning is understood
-by Wrattler and is the graph has a node for each call and constant. Hexagons represent
-data frames shared by cell and stored in the data store.}}
-\label{fig:deps}
-\vspace{-0.5em}
-\end{figure}
 
 \subsection{Language runtimes}
 
 Language runtimes are responsible for evaluating code and assisting with code analysis during
 the construction of dependency graph. They can run as server-side components (e.g.~for R and Python)
-or as client-side components (for JavaScript and small analytical DSLs used by AI assistants).
+or as client-side components (in case of JavaScript).
 Unlike Jupyter kernels, a language runtime is stateless. It reads data from and writes data to
 the data store. (Using a cache for efficiency.)
 
@@ -369,11 +361,22 @@ a notebook, it guides the user in creating a script in the DSL. Running the scri
 the required operation (such as data cleaning). The assistant defines the semantics
 of those operations and, when the script is executed, stores the result into a data
 store. This new data frame can contain new data or additional information (such as their
-inferred probabilistic type).
+inferred types).
 The interaction is illustrated in Figure~\ref{fig:arch}. An AI assistant reads data from the data
 store and returns suggestions to the notebook, which the user can review and accept.
 
 Assistants are therefore based on two different ideas:
+
+\begin{figure}
+\includegraphics[scale=1,trim=0.5cm 0.5cm 0.5cm 0.5cm]{graph.pdf}
+
+\caption{\small{Dependency graph for the notebook in Figure~\ref{fig:notebook}.
+Data acquisition is represented as a single Python cell. Data cleaning is understood
+by Wrattler and is the graph has a node for each call and constant. Hexagons represent
+data frames shared by cell and stored in the data store.}}
+\label{fig:deps}
+\vspace{-0.5em}
+\end{figure}
 
 \paragraph{Domain specific languages.}
 
@@ -418,7 +421,9 @@ significantly so that the user does not need to keep rejecting similar changes.
 In the above example, the interaction is provided through the ``.'' operator of the scripting
 language. When the analyst types the first line to invoke the AI assistant and types ``.''
 the datadiff assistant offers the most likely patches and the user can choose which ones
-to accept. Scripts constructed in such way are readable, allowing the data analyst to look at them
+to accept. 
+
+Scripts consisting of a chain of simple method calls are readable, allowing the data analyst to look at them
 and verify that the transformations accomplish the intended task (such verification further
 benefits from live previews that Wrattler provides when the analyst navigates through the
 individual transformations).
@@ -430,10 +435,12 @@ by an AI assistant. This allows packaging the assistant as an equivalent of scik
 data preparation.
 
 \vspace{1em}
+\noindent
 The Wrattler architecture supports the development of AI assistants in a number of ways. First, AI
 assistants have access to the data store and can use it to provide guidance about both data and
 code. Second, Wrattler includes an extensible framework for defining domain-specific languages
 (DSLs) that can describe, for example, data extraction, cleaning, transformation or visualization.
+
 The data store provides AI assistants with
 two sources of information that they can exploit
 to determine what guidance to provide the analyst:
@@ -744,6 +751,7 @@ the table with the following information:
   probability of being an arbitrary string.
 \end{itemize}
 
+\noindent
 Assuming the data frame is extracted from a government web page, each row of the data set
 could further be annotated with the URL of the data source. This makes it possible to track
 provenance at a fine-grained level. If we then append two such data frames, we will know

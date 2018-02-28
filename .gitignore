@@ -6,3 +6,5 @@ report/paket-files
 *.aux
 *.log
 *.out
+*.bbl
+*.blg
