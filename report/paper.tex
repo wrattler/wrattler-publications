@@ -807,30 +807,71 @@ an AI assistant -- possibly using entity linkage -- inferred and extended it wit
 \subsection{Schemas for data science}
 \label{sec:datastore-schema}
 
-{\color{red}
-This hierarchy will include some basic things that the data store understands and can
-convert between (integers, floats, unbounded size integers, ISO dates, etc.)
+Just like the default namespace of Schema.org defines common types of entities, Wrattler
+should define basic schema for the most common annotations. This includes two kinds of annotations.
+First, there are primitive type annotations that are understood by the data store. Second,
+there are frequent semantic annotations that are generally useful. 
 
-In addition, we will define some purely semantic annotations that are commonly useful and
-we will define a hierarchy for those. This represents things like addresses, postcodes, countries,
-cities, etc.
+\paragraph{Schemas for primitive types.} The data store will store primitive values in the
+data frame in a suitable native format such as floating-point number, Boolean, string or 
+ISO 8601 date. However, this representation should remain internal and data store should be
+able to consume and expose data in formats required by the client (this is further discussed
+in Section~\ref{sec:datastore-negotiation}). This will be done through primitive type annotations.
+The data store will understand those and will be able to convert between them automatically.
+The primitive type annotations include:
+%
+\begin{itemize}
+\item[--] \textbf{Numerical formats}. The data store will be able to convert between a number of common numerical
+  formats such as integers, floats and unbounded size integers. In addition, values can also be
+  formatted differently. Examples include the scientific notation (1.34e10) or variations in 
+  decimal separators used in different cultures.
+  
+\item[--] \textbf{Dates}. The data store will be able to recognise and convert between a number of
+  standard date formats (such as ISO 8601 format, dates in US and non-US formats).
 
-Everyone can define their own schemas (like schema.org) by defining their own namespace (URL)
-and providing entities with their custom namespace. The data store will simply save and return
-this information - without doing any checking.}
+\item[--] \textbf{Missing values}. The data store will record missing values internally and will be
+  able to return them in a variety of formats, depending on the client request (NaN, special 
+  strings such as empty or \#!NULL, etc).
+   
+\item[--] \textbf{Geo coordinates}. Finally, the list of primitive types might also include geographical
+  coordinates, in which case the data store will recognize basic formats such as GPS coordinates
+  and Northings and Eastings.  
+\end{itemize}
+
+\noindent
+The above primitive types need to be understood by the data store, in order to enable easy
+communication between clients written in a variety of programming environments that use different
+primitive types. The key idea is that each client will only need to handle, for example, one format 
+for dates. The data store will be able to communicate using this format, even when the value was
+written in another format by another client.
+
+In addition, Wrattler should define a set of annotations that can be used by a wide range of
+standard data sets. It is useful to provide a basic schema for such common annotations as this
+will enable a range of AI assistants and other tools to exchange information without first having
+to define a common custom schema. Those should include annotations for places (addresses, 
+countries, cities, postcodes), physical units (meters, killograms, etc.), contact information
+(e-mails, phone numbers) and similar. We will investigate whether Schema.org or other existing
+standards developed by the semantic web community already cover those areas.
 
 \subsection{Content negotiation}
-{\color{red}
-The only bit where the data store does something clever is that it will be able to return data
-in a format that the client asked for (a bit like HTTP negotiation). The client can say, ``I only
-understand semantic information defined by these schema namespaces`` and the data store will do
-its best to return data in the required format.
+\label{sec:datastore-negotiation}
 
-For simple types (e.g. dates) that the data store understands, it will convert data accordingly.
-For other semantic information that the data store does not understand (e.g. information that
-a certain cell is missing with a probability $p$), the data store will filter out the extra
-information and just return the raw number.
-}
+As noted earlier, the data store will understand a range of primitive data types and will be 
+able to convert between them. This will be done using a content negotiation protocol,
+similar to the Accept/Content-Type header pair in the HTTP protocol. Rather than using 
+content type as in HTTP, the negotiation will be based on the schema. For example, a client may
+specify that it accepts data with a certain namespace or that it recognizes a specified list of
+types.
+
+For primitive types that the data store understands, it will convert data according to the
+request made by the client. For example, a date can be automatically converted between 
+mm/dd and dd/mm formats. For additional semantic annotations that the data store does not
+understand, it will simply drop the extra information not required by the client.
+
+This makes it possible to exchange data efficiently. For example, a data frame where each cell
+is annotated with a probabilistically inferred type will be significantly larger than a data
+frame contianing just raw numbers. The content negotiation protocol allows the client to 
+request a data frame with just raw numbers, significantly reducing the size.
 
 \bibliographystyle{plain}
 \bibliography{paper}
