@@ -83,30 +83,84 @@
 Data science is an iterative, exploratory process that requires a collaboration between a 
 computer system and a human. A computer can provide advice based on statistical analysis of the 
 data and discover hidden structures or corner cases, but only a human can decide what those mean
-and decide how to handle them in data science scripts.
+and decide how to handle them in data science scripts. Data science is often cited as an expensive
+and time consuming task, especially due the costs of data cleaning and data wrangling.
+We propose four fundamental reasons why
+practical data science is expensive:
 
-A data science environment of the future needs to support an interaction model that keeps the 
-human in the loop, allows an efficient human-computer interaction and can be extended with new 
-AI asistants that provide advice about data. Such advice needs to be explainable to the human user,
-as well as machine-readable by other components of the system. In this report, we present Wrattler, 
-a system that is:
+\paragraph{Big data is big,} 
+so the analyst doesn't understand it all.*
+Even if a data set is small enough fits on one computer, it's still too large to fit in 
+an analyst's working memory.
+But this means every analysis is huanted
+by the spectre of lurking, potentially
+unknown data quality  issues.
+This also makes it more difficult to do data fusion, because there may be corner cases that make it more difficult to join two disparate data sources than expected.
 
-\paragraph{Interactive.}
+\paragraph{The double Anna Karenina principle.}
+Not only is every dirty data set  dirty in its own way, but \emph{pace} Tolstoy, every clean data set is clean in its own way as well. 
+"Data" is such an abstract concept that specific integrity conditions to characterize whether data is dirty, and potentially even the most appropriate formalism for integrity conditions,  differ dramatically across
+the vast array of disparate use cases of data science,
+ranging form relational data describing the customers of a country, time series data describing sensor data in an internet of things platform, and huge datasets of satellite imagery of the earth over a multi-year time scale.
+
+\paragraph{Death by a thousand cuts.} 
+Often data transformation and processing steps are individually  very simple. But  there may need to be lots of them, and
+because big data is big,
+an analyst never knows if she has found them all.
+
+\paragraph{Feedback cycles everywhere.} Data science is 
+not a pipeline but a connected mess of epicycles. This is because every step 
+in a data analysis actually teaches 
+the analyst more about the data and the problem, which might require rehtinking the earlier steps. 
+For example, there might be data quality issues that 
+are not uncovered until the analyst
+investigates the output of a regression model. 
+
+\vspace{1em}
+To meet these challenges, we present Wrattler,
+a new type of system for data science
+that aims to transform the process
+of data analysis.
+Wrattler combines the interactive and literal programming paradigms
+of notebook systems such as Jupyter
+with new advances in AI systems for data wrangling and in provenance.
+The main design principles in Wrattler are:
+
+\paragraph{Interactive.} Interactivity
+is a necessary because ``big data is big'', so the analyst learns about 
+the data set and the problem as she explores it.
 Wrattler enables an efficient interaction by bringing computation closer to the human.
 Notebooks run in the browser, cache partial results of computations and provide previews
 of script results on-the-fly during development.
 
 \paragraph{Reproducible.} 
+Data analyses must be reproducible
+because of feedback cycles. As the
+analyst learns more about the problem,
+this may uncover data cleaning or preparation issues that require
+redesigning and rerunning the analysis.
 Wrattler separates the task of running scripts from the task of managing state. 
 This is handled by a data store, which tracks the provenance and semantics of data, supports 
 versioning and keeps the history, making the data analyses fully reproducible.
 
 \paragraph{Polyglot.}
+Modern data science naturally draws
+on many competing languages and libraries, such as R and Scipy. As a side effect
+of our interactive, reproducible design,
+we obtain nearly for free the ability
+to support polyglot data analyses.
 Multiple languages can be used in a single notebook and share data via the data store.
 Analysts can use R and Python, but also interactive languages for data exploration
 that run in the browser and provide live previews.
 
 \paragraph{Smart.}
+AI can examine and find patterns
+in big data where a human cannot,
+again aiming at the problem that
+big data is big.
+AI can be used to direct the analyst's attention and to generalize  decisions about data transformation
+to new data that that the analyst
+hasn't seen.
 Wrattler serves as a platform for AI assistants that use machine learning to provide suggestions 
 about data. Such AI assistants connect to the data store to infer types and meaning of data, provide 
 help with data cleaning and joining, but also help data exploration by finding typical and atypical 
@@ -296,37 +350,41 @@ such as R, Python or JavaScript.
 \section{AI assistants}
 \label{sec:ai}
 
-{\color{blue}
-An AI assistant guides data analysts through a single data collection, integration, preparation, 
-analytics, or reporting task. Typically analysts will interact with many separate assistants over 
+{
+An AI assistant is a component
+of the system that 
+guides data analysts through a single data collection, integration, preparation, 
+analytics, or reporting task.
+For example, an assistant might
+specialize in identifying suspicious
+values, such as "-1" in a column labelled
+"heart rate", which might indicate
+that certain data was not collected.
+Assistants are interactive, in that
+they propose a transformation
+of the data to the analyst, based on combinations
+of statistical and symbolic AI analysis,
+and then refine the transformation
+based on feedback from the analyst.
+Typically analysts will interact with many separate assistants over 
 the course of an analysis, each of which specialize in a single kind of task.
 }
 \subsection{Architecture of AI assistants}
 
-{\color{blue}
-AI assistants have access to information in the Wrattler data store and can use two separate
-aspects for their guidance:
-%
-\begin{itemize}
-\item[--] AI assistants can access all data stored in the data
-store. This includes imported external data files, such as raw text or raw HTML content from which
-the analyst wants to extract data, as well as structured data frames imported from CSV files or
-produced as a result of previous computations. Moreover, an AI assistant can also access multiple
-versions of a file.
-\vspace{0.25em}
+There are two important design aspects of AI assistants, which may seem 
+contradictory.
+ First, they must be interactive, following
+ the first principle behind Wrattler, but
+ they must also be reproducible.
+We square this circle by using the notebook
+system as a reproducible interlingua. 
+The output of an AI assistant is always code, rather
+than being a black-box that transforms data,
+and it is this code that is agreed between the AI and the analyst during the interaction.
+Thus the interaction is viewed as a ``design phase''
+that is not reproduced on new data.
 
-\item[--] AI assistants can access the dependency graph created for a 
-notebook. This allows the them to access the transformation history, which is the code 
-that has already been run during the analysis. The idea is that assistants may need to know the 
-context of transformations that have already been performed in order to decide what to suggest next.
-\end{itemize}
-
-The assistants should be self-contained in the sense that they interact only through the 
-data store. This restriction is designed to encourage the Unix "do one thing well" design for 
-assistants.
-
-There are two important design aspects of AI assistants. First, they always produce code, rather
-than being a black-box that transforms data. Second, they are designed to be used interactively. 
+Assistants are therefore based on two different ideas:
 
 \paragraph{Domain specific languages.}
 The output of an assistant is code in a small domain-specific language designed for the task that
@@ -351,63 +409,172 @@ that the transformation accomplishes what they had wanted. As far as possible, t
 should be "reusable" in a sense that it could be copy-pasted into another script that was 
 processing a similar dataset and would still work. You can think of a snippet as something 
 that a person might write in a single cell of a Jupyter notebook.
-}
 
-\subsection{Types of AI assistants}
-{\color{blue}
-AI assistants can be imagined for every step of the data analytics process. We attempt a fairly c
-omprehensive list of the data analytics tasks for which can imagine targetting assistants. Then, 
-for each task, we list a few examples of specific agents. Even though the list of agents is 
-incomplete, it is still too long to implement fully in the current project.
+
+\vspace{1em}
+AI assistants have access to information in the Wrattler data store and can use two separate
+aspects for their guidance:
+%
+\begin{itemize}
+\item[--] AI assistants can access all data stored in the data
+store. This includes imported external data files, such as raw text or raw HTML content from which
+the analyst wants to extract data, as well as structured data frames imported from CSV files or
+produced as a result of previous computations. Moreover, an AI assistant can also access multiple
+versions of a file.
+\vspace{0.25em}
+
+\item[--] AI assistants can access the dependency graph created for a 
+notebook. This allows the them to access the transformation history, which is the code 
+that has already been run during the analysis. The idea is that assistants may need to know the 
+context of transformations that have already been performed in order to decide what to suggest next.
+\end{itemize}
+
+The assistants should be self-contained in the sense that they interact with each other
+only through the 
+data store. This restriction is necessary in order
+for provenance tracking and reproducibility.
+
+
+
+\subsection{The Assistant Landscape}
+{
+
+AI assistants can be imagined for every step of the data analytics process. 
+To give an idea of the breadth of this framework,
+we present a broad list of the data analytics tasks which have potential for assistant automation.
+This is an intentionally broad list, more so than
+could be fully explored in even a large research project, but gives a sense of the breadth of 
+potential use cases of our framework.
 
 \paragraph{Data collection.} Assistants can search the data store, as well as external repositories
 to recommend data sets that are relevant to the task at hand and offer to import these. For example,
-when analysing data about different countries, more information about countries can be offered.
+when analysing data about different countries, 
+the assistant could suggest joining in public
+demographic information from DBPedia.
 
-\paragraph{Data integration.} Assistants can identify pairs of variables across multiple data 
-sources that are likely to be coding the same variable. 
+\paragraph{Data integration} is a problem as common
+as it is difficult. We envisage assistants
+that combine logical and statistical reasoning to assist
+with data  integration. A simple but useful
+example of a tool in this space is to
+ identifying pairs of variables across multiple data 
+sources that are likely to be daily temperatures.
+More sophisticated examples could include and extend the
+most cutting edge techniques in the data fusion and
+semantic technologies literatures.
 
-\paragraph{Schema inference.} Inferring types of variables and doing this probabilistically.
+\paragraph{Schema inference.} A sad fact of data
+science is that data sets are often not as well documented
+as we might like, even to the minimal level of
+documentation of the types of each column.
+There is an interesting opportunity to
+develop machine learning methods that inferring types of variables from their values, e.g.,
+by noticing that integer values between 0 and 30 in 
+the United Kingdom might describe an outdoor temperature, especially if other weather-related
+variables are detected in the data set.
 
 \paragraph{Data parsing.}
-Quick tool for specifying a scraper for web pages (related to wrapper induction, Sumit Gulwani 
-work, possibly this paper Robust and Noise Resistant Wrapper Induction
-Assistant to automatically infer format of csv files
-Assistants to extract tables from pdf's, html
-Identify which values are likely to be "special", like missing data markers
+A common task in data analysis is to convert
+data that is ``almost'' in structured form,
+such as HTML tables, into a relational table.
+Assistants in this space include
+tools specifying a scraper for web pages, related
+to wrapper induction \cite{Kushmerick1997WrapperIF},
+for inferring format of CSV files (while simple
+conceptually, they have no standard format), and
+for extracting tables from html and pdf files
+\cite{pinto03table}.
 
-\paragraph{Data cleaning}
-Identifying values that seem to be out of range, e.g. missing value indicators
-Identifying possible inconsistent coding of strings
-Identifying potential functional dependencies (1:1 correspondences) and returning violations
-Manual cleaning of subset of data (a la Sample Clean)
-Indentifying rows that seem "jointly" unusual, i.e., that seem not to conform to statistical dependencies among the columns
-Identifying distinct records that may refer to the same entity (record linkage)
+\paragraph{Data cleaning} is a well studied
+problem in the databases and data mining literature
+\cite{abedjan2016detecting,ilyas2015},
+but there are still a huge number of issues that have been unexplored.
+For example, we envisage assistants for
+Identifying values that seem to be out of range, e.g. missing value indicators;
+Identifying possible inconsistent coding of strings,
+such as different representations of acrynoms;
+indentifying rows that seem "jointly" unusual, i.e., that seem not to conform to statistical dependencies among the columns; and
+identifying distinct records that may refer to the same entity (record linkage).
 
-\paragraph{Data monitoring.}
-Data diff: Returning a report of the differences between two data sets
-Monitoring classifier to detect shifts in its input distribution
-Detecting change points and covariate shift
-Montioring classifier to suggest when/how often new data points shoud be labelled for monitoring
+\paragraph{Data monitoring.} Once an analysis
+is completed, it may result in a machine learning
+model which will then be deployed on a data stream.
+Once a classifier is deployed, it must be monitored 
+to detect shifts in its input distribution,
+such as change points, covariate shift, and
+concept drift. This includes the problem 
+to suggesting when/how often new data points should be labelled for monitoring.
+Even for data analyses that do not involve
+deploying a ``production model'', there is
+often a need to run an analysis periodically on updated data, such as re-running last quarter's
+analysis on this quarter's data.
+In such cases, we might believe that the two data
+sets come from approximately the same distribution
+and format, so we can exploit
+divergences from this assumption to indicate
+potential issues with data quality.
+As part of the Wrattler effort, we have
+introduced the \emph{data diff} problem \cite{datadiff},
+which aims to improve the process of data wrangling by 
+returning a report of the differences between two data sets.
 
-\paragraph{Exploratory visualization.}
-Summarizing most representative rows of a data table
-Automatically styling scatterplots and bar charts
+\paragraph{Exploratory visualization} to summarize
+data sets, both the target data of the analysis,
+and the results of transformations that the analyst
+creates. Potential assistants here include ones
+to summarize most representative rows of a data table,
+and automatically choosing appropriate interactive
+visualizations, such as scatterplots and bar charts,
+with styling decisions such as axes automatically
+chosen to be most informative.
 
 \paragraph{Performing analytics.}
-Which classification methods should I use? e.g., by search through similar problems on Kaggle and Open ML (a la AutoML)
-Simiarly for feature selection methods and so on
-Hyperparameter exploration
+An increasing amount of attention is being
+given to the AutoML challenge \cite{guyon_review_2016}, which focuses
+on automatically choosing a classification
+methods, feature representations and hyperparameters
+for a given classification task, without the need for human intervention.
 
 \paragraph{Debugging and interpreting predictive analytics.}
-Debugging predictive analytics, e.g., deciding whether and how to add more features
-Error analysis assistant: Summarize the output on validation data
-Error analysis based on visualization of classifier score (see work of Saleema Amershi)
-Tools for explaining the predictions of a model on validation data (a la LIME) * Research directions: Improved model families for the interpretable explanation. Decision lists on marginal distribution rather than joint
-"Training set blame": Given an error in the validation data, what examples from the training set caused me to make that error?
-Explaining differences between predictions: why was instance 24601 treated differently than 24675?
+Every time a new machine learning model is trained,
+the first question an analyst has is often
+why its accuracy is not better. But
+debugging predictive analytics is notoriously difficult, and the remedies indirect and expensive,
+ e.g., labelling more data, adding more features,
+ using a more complex model. Debugging and improving
+ models is a rich area for potential assistants.
+ There is potentially low hanging fruit available
+ in how to aid the tasks of
+error analysis, exploring the
+predictions of the model 
+on validation data. Some early work in this direction is
+\cite{saleema}.
+There is a rich and growing literature on
+interpreting and explaining the predictions
+of a model \cite{lipton:mythos,doshi-velez17,ribiero2016lime,darksight}.
+Two potential directions from data are
+debugging by using
+"training set blame": Given an error in the validation data, what examples from the training set caused me to make that error? This might build on the work of \cite{percy}.
+Another potential avenue is explaining
+differences between predictions: why was instance 42 treated differently than instance 24601, even though they appear highly similar to a human?
 }
+
+\vspace*{1em}
+
+%%cs possibly we don't need to go into detail
+%% in this version of the report? Or we might
+%% decide to add this back.
+\begin{comment}
 \subsection{Possible AI assistants}
+
+Designing an AI assistant requires an intriguing
+combination of data science, AI, and user interaction
+thinking.
+As an example of the types of design considerations
+that arise, we go into more detail about the
+design issues that arise when considering
+three examples of the broader list of agents
+in the previous section.
 
 {\color{blue}
 
@@ -494,6 +661,7 @@ Users could ask for more rows, mark two items as similar, or mark an item as uni
 Or perhaps better would be to allow drill down, i.e., to make it easy to explore
 the clusters represented by each example.
 }
+\end{comment}
 
 \section{Data store}
 \label{sec:datastore}
@@ -553,4 +721,6 @@ a certain cell is missing with a probability $p$), the data store will filter ou
 information and just return the raw number.
 }
 
+\bibliographystyle{plain}
+\bibliography{paper}
 \end{document}
