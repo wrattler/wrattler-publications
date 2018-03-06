@@ -12,18 +12,8 @@
 \usepackage{booktabs}
 \usepackage{subcaption}
 \usepackage{enumitem}
-\usepackage[shortlabels]{enumerate}
+\usepackage{enumerate}
 \setlist{leftmargin=6mm}
-
-\newcounter{thc}
-\newcounter{dfc}
-
-\theoremstyle{plain}
-\newtheorem{lem}[thc]{Lemma}
-\newtheorem{theorem}[thc]{Theorem}
-
-\theoremstyle{definition}
-\newtheorem{definition}[dfc]{Definition}
 
 %\acmConference[PL'17]{ACM SIGPLAN Conference on Programming Languages}{January 01--03, 2017}{New York, NY, USA}
 %\acmYear{2017}
@@ -35,7 +25,7 @@
 
 \title{Wrattler: \textnormal{A platform for AI-assisted data science}}
 
-\author{Authors}
+\author{AIDA Team, The Alan Turing Institute}
 %\affiliation{
 %  \institution{The Alan Turing Institute}
 %  \country{London, United Kingdom}
@@ -62,6 +52,7 @@
 \newcommand{\lsep}{~\,|\,~}
 \newcommand{\num}[1]{\textcolor{numclr}{#1}}
 \newcommand{\str}[1]{\textnormal{\textcolor{strclr}{\sffamily "#1"}}}
+\newcommand{\strf}[1]{\textnormal{\textcolor{strclr}{\sffamily #1}}}
 \newcommand{\rstr}[1]{\textnormal{\textcolor{rstrclr}{\sffamily "#1"}}}
 \newcommand{\ident}[1]{\textnormal{\sffamily #1}}
 \newcommand{\qident}[1]{\textnormal{\sffamily \guillemotleft #1\guillemotright}}
