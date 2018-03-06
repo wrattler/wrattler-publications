@@ -767,9 +767,7 @@ with semantic information. The focus of Schema.org is on higher-level entities (
 a person, an event or a place), rather than lower-level information, but the format itself could
 be reused by Wrattler.
 
-As an example, consider the following Schema.org description of a place (the following shows a
-JSON encoding, but it is worth noting that Schema.org also supports RDF encoding):
-%
+\begin{figure}
 \begin{equation*}
 \begin{array}{l}
 \{~~\; \str{@context}: \str{http://schema.org},\\
@@ -781,8 +779,13 @@ JSON encoding, but it is worth noting that Schema.org also supports RDF encoding
 \qquad    \str{postalCode}: \str{NW53HL} ~\}~\}\\
 \end{array}
 \end{equation*}
+\caption{\small{Example of a Schema.org annotation using a JSON encoding (it is worth noting 
+that Schema.org also supports RDF).}}
+\label{fig:schema}
+\vspace{-1em}
+\end{figure}
 
-\noindent
+As an example, Figure~\ref{fig:schema} shows a Schema.org description of a place.
 The \str{@context} attribute defines a namespace of a schema that defines the available
 entities. The default namespace, used here, includes two entities that we use in this 
 example, namely Place and PostalAddress.
