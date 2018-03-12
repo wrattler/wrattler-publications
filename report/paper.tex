@@ -92,7 +92,7 @@ This also makes it more difficult to do data fusion, because there may be corner
 Not only is every dirty data set  dirty in its own way, but \emph{pace} Tolstoy, every clean data set is clean in its own way as well.
 "Data" is such an abstract concept that specific integrity conditions to characterize whether data is dirty, and potentially even the most appropriate formalism for integrity conditions,  differ dramatically across
 the vast array of disparate use cases of data science,
-ranging form relational data describing the customers of a country, time series data describing sensor data in an internet of things platform, and huge datasets of satellite imagery of the earth over a multi-year time scale.
+ranging from relational data describing the customers of a country, time series data describing sensor data in an internet of things platform, and huge datasets of satellite imagery of the earth over a multi-year time scale.
 
 \paragraph{Death by a thousand cuts.}
 Often data transformation and processing steps are individually  very simple. But  there may need to be lots of them, and
@@ -119,10 +119,10 @@ with new advances in AI systems for data wrangling and in provenance.
 The main design principles are:
 
 \paragraph{Interactive.} Interactivity
-is a necessary because ``big data is big''. The analyst learns about
+is necessary because ``big data is big''. The analyst learns about
 the data set and the problem as she explores it.
 Wrattler enables an efficient interaction by bringing computation closer to the human.
-Notebooks run in the browser, cache partial results of computations and provide previews
+Wrattler notebooks run in the browser, cache partial results of computations and provide previews
 of script results on-the-fly.
 
 \paragraph{Reproducible.}
@@ -176,9 +176,9 @@ how semantic information about data is managed by the data store (Section~\ref{s
 \section{Wrattler and notebooks}
 \label{sec:overview}
 
-Notebook systems such as Jupyter became a popular programming environment for data science, because
+Notebook systems such as Jupyter have become a popular programming environment for data science, because
 they support gradual data exploration and provide a convenient way of interleaving code with
-comments and visualizations. However, notebooks suffer from a number of issues that hanper
+comments and visualizations. However, notebooks suffer from a number of issues that hamper
 reproducibility and limit the possible interaction model.
 
 Notebooks can be used in a way that breaks reproducibility. The state is maintained by a \emph{kernel}
@@ -260,7 +260,7 @@ The dependency graph enables several features that are difficult for most notebo
 \subsection{Data store}
 \label{sec:wrattler-ds}
 
-The data store provides a way for persistently stroing data and enables communication between
+The data store provides a way for persistently storing data and enables communication between
 individual Wrattler components. Data store keeps external data files imported into Wrattler,
 as well as computed data frames (and, potentially, other data structures). It is immutable
 and keeps past versions of data to allow efficient state rollback. For persistency and versioning,
@@ -271,7 +271,7 @@ The data store supports a mechanism for annotating data frames with additional s
 \begin{itemize}
 \item[--] Columns can be annotated with (and stored as) primitive data type such as date or floating-point number.
 \vspace{0.25em}
-\item[--] Columns (or a combination) can be annotated with semantic annotation such as geo-location or and address.
+\item[--] Columns (or a combination) can be annotated with semantic annotation such as geo-location or address.
 \vspace{-0.85em}
 \item[--] Columns, rows and cells of the data frame can be annotated with other metadata such as provenance.
 \end{itemize}
@@ -307,7 +307,7 @@ Language runtimes are responsible for evaluating code and assisting with code an
 the construction of dependency graph. They can run as server-side components (e.g.~for R and Python)
 or as client-side components (in case of JavaScript).
 Unlike Jupyter kernels, a language runtime is stateless. It reads data from and writes data to
-the data store. (Using a cache for efficiency.)
+the data store (using a cache for efficiency).
 
 \section{AI assistants}
 \label{sec:ai}
@@ -371,9 +371,10 @@ data frames shared by cell and stored in the data store.}}
 
 \paragraph{Domain specific languages.}
 
-Wrattler includes a scripting language with simple syntax that is used by individual AI assistants
-to define domain specific languages. The syntax is shared across multiple AI assistnts, but the
-operations are provided by individual assistants.
+Wrattler includes a scripting language with simple syntax that is used
+by individual AI assistants to define domain specific languages. The
+syntax is shared across multiple AI assistants, but the operations are
+provided by individual assistants.
 
 For example, an AI assistant based on datadiff
 guides the user in writing scripts that transform a malformed data frame into a correct format
@@ -395,7 +396,7 @@ one column needs to be recoded (turning $\num{1}$ and $\num{2}$ into strings
 The code produced by an AI assistant can be used in two ways. First, the analyst writes the code
 interactively during an interaction with the AI assistant. During this phase, Wrattler
 keeps a fine-grained representation of the code in the dependency graph (second cell in
-Figure~\ref{fig:deps}), which allows Wrattler to provie live previews of the result, giving the
+Figure~\ref{fig:deps}), which allows Wrattler to provide live previews of the result, giving the
 user an immediate feedback.
 
 At a later stage, when the code is used in production, the code can be translated to a language
@@ -478,7 +479,7 @@ as it is difficult. We envisage assistants
 that combine logical and statistical reasoning to assist
 with data  integration. A simple but useful
 example of a tool in this space is to
- identifying pairs of variables across multiple data
+ identify pairs of variables across multiple data
 sources that are likely to be daily temperatures.
 More sophisticated examples could include and extend the
 most cutting edge techniques in the data fusion and
@@ -510,11 +511,11 @@ for extracting tables from html and pdf files
 problem in the databases and data mining literature
 \cite{abedjan2016detecting,ilyas2015},
 but there are still a huge number of issues that have been unexplored.
-For example, we envisage assistants for
-Identifying values that seem to be out of range, e.g. missing value indicators;
-Identifying possible inconsistent coding of strings,
+For example, we envisage assistants for:
+identifying values that seem to be out of range, e.g. missing value indicators;
+identifying possible inconsistent coding of strings,
 such as different representations of acrynoms;
-indentifying rows that seem "jointly" unusual, i.e., that seem not to conform to statistical dependencies among the columns; and
+identifying rows that seem "jointly" unusual, i.e., that seem not to conform to statistical dependencies among the columns; and
 identifying distinct records that may refer to the same entity (record linkage).
 
 \paragraph{Data monitoring.} Once an analysis
@@ -524,11 +525,11 @@ Once a classifier is deployed, it must be monitored
 to detect shifts in its input distribution,
 such as change points, covariate shift, and
 concept drift. This includes the problem
-to suggesting when/how often new data points should be labelled for monitoring.
+of suggesting when/how often new data points should be labelled for monitoring.
 Even for data analyses that do not involve
 deploying a ``production model'', there is
-often a need to run an analysis periodically on updated data, such as re-running last quarter's
-analysis on this quarter's data.
+often a need to run an analysis periodically on updated data, such as
+re-running last quarter's analysis on this quarter's data.
 In such cases, we might believe that the two data
 sets come from approximately the same distribution
 and format, so we can exploit
@@ -557,28 +558,24 @@ methods, feature representations and hyperparameters
 for a given classification task, without the need for human intervention.
 
 \paragraph{Debugging and interpreting predictive analytics.}
-Every time a new machine learning model is trained,
-the first question an analyst has is often
-why its accuracy is not better. But
-debugging predictive analytics is notoriously difficult, and the remedies indirect and expensive,
- e.g., labelling more data, adding more features,
- using a more complex model. Debugging and improving
- models is a rich area for potential assistants.
- There is potentially low hanging fruit available
- in how to aid the tasks of
-error analysis, exploring the
-predictions of the model
-on validation data. Some early work in this direction is
-\cite{saleema}.
-There is a rich and growing literature on
-interpreting and explaining the predictions
-of a model \cite{lipton:mythos,doshi-velez17,ribiero2016lime,darksight}.
-Two potential directions from data are
-debugging by using
-"training set blame": Given an error in the validation data, what examples from the training set caused me to make that error? This might build on the work of \cite{percy}.
-Another potential avenue is explaining
-differences between predictions: why was instance 42 treated differently than instance 24601, even though they appear highly similar to a human?
-}
+Every time a new machine learning model is trained, the first question
+an analyst has is often why its accuracy is not better. But debugging
+predictive analytics is notoriously difficult, and the remedies
+indirect and expensive, e.g., labelling more data, adding more
+features, using a more complex model. Debugging and improving models
+is a rich area for potential assistants.  There is potentially low
+hanging fruit available in how to aid the tasks of error analysis,
+exploring the predictions of the model on validation data. Some early
+work in this direction is \cite{saleema}.  There is a rich and growing
+literature on interpreting and explaining the predictions of a model
+\cite{lipton:mythos,doshi-velez17,ribiero2016lime,darksight}.  Two
+potential directions from are debugging by using "training set
+blame": Given an error in the validation data, what examples from the
+training set caused me to make that error? This might build on the
+work of \cite{percy}.  Another potential avenue is explaining
+differences between predictions: why was instance 42 treated
+differently than instance 24601, even though they appear highly
+similar to a human?  }
 
 %%cs possibly we don't need to go into detail
 %% in this version of the report? Or we might
@@ -694,16 +691,19 @@ In the initial version of Wrattler, we restrict the data storage to raw input fi
 data frames, however we note that it would be desirable to include other data structures
 such graph or network data.
 
-In this section, we focus on the initial functionality that is required from the data store.
-We focus on the public interface exposed by the data store, but We do not discuss the technolgy
-used for data storage -- this can be decided during the development.
+In this section, we focus on the initial functionality that is
+required from the data store.  We focus on the public interface
+exposed by the data store, but we do not discuss the technology used
+for data storage -- this can be decided during the development.
 
-Data frames stored in the data store can be annotated with metadata. Such metadata can
-communicate information between multiple AI assistants. For example, first AI assistant can
-infer that a type of a pair of columns represents GPS coordinate and produce a data frame
-with annotations specifying this information. A second AI assistant can then use this information
-and automatically provide a data visualization in the form of map. In the rest of this section,
-we discuss the structure of those annotations.
+Data frames stored in the data store can be annotated with
+metadata. Such metadata can communicate information between multiple
+AI assistants. For example, first AI assistant can infer that a pair
+of columns represent GPS lat/lon coordinates and produce a data frame
+with annotations specifying this information. A second AI assistant
+can then use this information and automatically provide a data
+visualization in the form of map. In the rest of this section, we
+discuss the structure of those annotations.
 
 \subsection{Semantic annotations}
 As noted in Section~\ref{sec:wrattler-ds}, annotations can be attached to individual cells,
@@ -827,9 +827,9 @@ The primitive type annotations include:
   able to return them in a variety of formats, depending on the client request (NaN, special 
   strings such as empty or \#!NULL, etc).
    
-\item[--] \textbf{Geo coordinates}. Finally, the list of primitive types might also include geographical
-  coordinates, in which case the data store will recognize basic formats such as GPS coordinates
-  and Northings and Eastings.  
+\item[--] \textbf{Geo coordinates}. The list of primitive types might also include geographical
+  coordinates, in which case the data store will recognize basic formats such as GPS coordinates  and Northings and Eastings.  
+
 \end{itemize}
 
 \noindent
@@ -843,7 +843,7 @@ In addition, Wrattler should define a set of annotations that can be used by a w
 standard data sets. It is useful to provide a basic schema for such common annotations as this
 will enable a range of AI assistants and other tools to exchange information without first having
 to define a common custom schema. Those should include annotations for places (addresses, 
-countries, cities, postcodes), physical units (meters, killograms, etc.), contact information
+countries, cities, postcodes), physical units (meters, kilograms, etc.), contact information
 (e-mails, phone numbers) and similar. We will investigate whether Schema.org or other existing
 standards developed by the semantic web community already cover those areas.
 
