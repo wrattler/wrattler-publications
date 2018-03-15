@@ -3,6 +3,9 @@ Paket.Restore.targets
 paket.targets
 report/packages
 report/paket-files
+tapp/packages
+tapp/paket-files
+.fake
 *.aux
 *.log
 *.out
