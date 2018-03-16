@@ -21,11 +21,11 @@
 %\acmDOI{} % \acmDOI{10.1145/nnnnnnn.nnnnnnn}
 \startPage{1}
 \setcopyright{none}
-\bibliographystyle{ACM-Reference-Format}
 
 \title{Wrattler: \textnormal{A platform for AI-assisted data science}}
 
-\author{AIDA Team, The Alan Turing Institute}
+\author{AIDA Team, The Alan Turing Institute \\ 16 March 2018}
+
 %\affiliation{
 %  \institution{The Alan Turing Institute}
 %  \country{London, United Kingdom}
@@ -80,8 +80,8 @@ We propose four fundamental reasons why
 practical data science is expensive:
 
 \paragraph{Big data is big,}
-so the analyst doesn't understand it all.*
-Even if a data set is small enough fits on one computer, it's still too large to fit in
+so the analyst doesn't understand it all.
+Even if a data set is small enough to fit on one computer, it is still too large to fit in
 an analyst's working memory.
 But this means every analysis is huanted
 by the spectre of lurking, potentially
@@ -261,7 +261,8 @@ The dependency graph enables several features that are difficult for most notebo
 \label{sec:wrattler-ds}
 
 The data store provides a way for persistently storing data and enables communication between
-individual Wrattler components. Data store keeps external data files imported into Wrattler,
+individual Wrattler components. The data store keeps external data files that have been
+imported into Wrattler,
 as well as computed data frames (and, potentially, other data structures). It is immutable
 and keeps past versions of data to allow efficient state rollback. For persistency and versioning,
 data store also serializes and stores multiple versions of the dependency graph.
@@ -270,9 +271,7 @@ The data store supports a mechanism for annotating data frames with additional s
 %
 \begin{itemize}
 \item[--] Columns can be annotated with (and stored as) primitive data type such as date or floating-point number.
-\vspace{0.25em}
 \item[--] Columns (or a combination) can be annotated with semantic annotation such as geo-location or address.
-\vspace{-0.85em}
 \item[--] Columns, rows and cells of the data frame can be annotated with other metadata such as provenance.
 \end{itemize}
 
@@ -291,7 +290,7 @@ more detail in Section~\ref{sec:datastore}.
 \textit{\small{and created a script that marks \#!NULL values as missing:}}\\[0.3em]
 \quad\kvd{let}~\ident{bbClean} = \ident{bbRaw}.\ident{missing}.\ident{as\_missing}(\str{\#!NULL})\\[0.3em]
 \textit{\small{Finally, we use JavaScript to create a histogram of upload speeds:}}\\[0.3em]
-\quad\ident{vega}.\ident{hsit}(\ident{bbClean}, \str{Upload speed})
+\quad\ident{vega}.\ident{hist}(\ident{bbClean}, \str{Upload speed})
 \end{array}
 \end{equation*}
 \vspace{-0.5em}
@@ -364,7 +363,7 @@ Assistants are therefore based on two different ideas:
 \caption{\small{Dependency graph for the notebook in Figure~\ref{fig:notebook}.
 Data acquisition is represented as a single Python cell. Data cleaning is understood
 by Wrattler and is the graph has a node for each call and constant. Hexagons represent
-data frames shared by cell and stored in the data store.}}
+data frames shared by multiple cells and stored in the data store.}}
 \label{fig:deps}
 \vspace{-0.5em}
 \end{figure}
@@ -553,7 +552,7 @@ chosen to be most informative.
 \paragraph{Performing analytics.}
 An increasing amount of attention is being
 given to the AutoML challenge \cite{guyon_review_2016}, which focuses
-on automatically choosing a classification
+on automatically choosing classification
 methods, feature representations and hyperparameters
 for a given classification task, without the need for human intervention.
 
@@ -566,13 +565,13 @@ features, using a more complex model. Debugging and improving models
 is a rich area for potential assistants.  There is potentially low
 hanging fruit available in how to aid the tasks of error analysis,
 exploring the predictions of the model on validation data. Some early
-work in this direction is \cite{saleema}.  There is a rich and growing
+work in this direction is that of \citet{ren2016squares}.  There is a rich and growing
 literature on interpreting and explaining the predictions of a model
-\cite{lipton:mythos,doshi-velez17,ribiero2016lime,darksight}.  Two
+\cite{lipton:mythos,doshi-velez17,Ribeiro2016lime,darksight}.  Two
 potential directions from are debugging by using "training set
 blame": Given an error in the validation data, what examples from the
 training set caused me to make that error? This might build on the
-work of \cite{percy}.  Another potential avenue is explaining
+work of \citet{koh2017understanding}.  Another potential avenue is explaining
 differences between predictions: why was instance 42 treated
 differently than instance 24601, even though they appear highly
 similar to a human?  }
@@ -694,12 +693,12 @@ such graph or network data.
 In this section, we focus on the initial functionality that is
 required from the data store.  We focus on the public interface
 exposed by the data store, but we do not discuss the technology used
-for data storage -- this can be decided during the development.
+for data storage; this is to be decided during the development.
 
 Data frames stored in the data store can be annotated with
 metadata. Such metadata can communicate information between multiple
-AI assistants. For example, first AI assistant can infer that a pair
-of columns represent GPS lat/lon coordinates and produce a data frame
+AI assistants. For example, suppose that the first AI assistant  infers that a pair
+of columns represent GPS latitude/longitude coordinates and produces a data frame
 with annotations specifying this information. A second AI assistant
 can then use this information and automatically provide a data
 visualization in the form of map. In the rest of this section, we
@@ -867,6 +866,6 @@ is annotated with a probabilistically inferred type will be significantly larger
 frame containing just raw numbers. The content negotiation protocol allows the client to 
 request a data frame with just raw numbers, significantly reducing the size.
 
-\bibliographystyle{plain}
+\bibliographystyle{plainnat}
 \bibliography{paper}
 \end{document}
