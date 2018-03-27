@@ -394,10 +394,12 @@ assistant mentioned above (Section~\ref{sec:comp-data}). Figure~\ref{fig:proto} 
 first cell of a sample Wrattler notebook analysing the UK broadband data.
 
 \begin{figure}
+\vspace{-0.5em}
 \includegraphics[scale=0.15]{screen.png}
 \caption{\small{TheGamma script that downloads and aggregates UK government data, running in 
   Wrattler notebook with a live preview.}}
 \label{fig:proto}
+\vspace{-0.5em}
 \end{figure}
 
 \section{Related work}
@@ -407,20 +409,23 @@ The work in this paper directly follows the work on IPython and Jupyter systems
 of their limitations. To address reproducibility, some Jupyter extensions and systems such
 as R markdown \cite{rmarkdown} lock cells after evaluation. 
 
-Dataflow notebooks \cite{dataflow} are more sophisticated and attach unique hashes to cell 
+Dataflow notebooks \cite{dataflow} are attach unique hashes to cell 
 evaluations. This allows the user to refer to dependencies explicitly and, in effect, construct
 a dependecy graph similar to ours manually.
 Scientific workflow systems \cite{taverna,kepler} manage evaluation of workflows over a 
 dependency graph similarly to Wrattler, but often allow editing it directly via a GUI, rather
 than through code in a notebook.
-The noWorkflow project \cite{noworkflow} links the two approaches by instrumenting Jupyter 
-kernel with a mechanism for capturing provenance based on light-weight code annotations.
 
-Our method of dependency grpah construction is inspired by Roslyn \cite{roslyn} and extends our
-earlier work on TheGamma \cite{thegamma}. It is simiar to methods used in live programming 
-languages \cite{live,subtext}, as well as incremental compilation \cite{incremental} and
-partial evaluation \cite{partial}. Wrattler adapts those methods to a notebook-like data
-science environment. 
+The noWorkflow project \cite{noworkflow} links the two approaches by instrumenting Jupyter 
+kernel with a mechanism for capturing provenance based on light-weight annotations.
+Vizer \cite{vizer} focuses on integrating notebooks with spreadsheet-like interface.
+It internally uses a data store component similar to ours, but does not keep dependency graph
+on the client.
+
+Our dependency grpah construction is inspired by Roslyn \cite{roslyn} and extends an
+earlier work on TheGamma \cite{livegamma}. It is simiar to methods used in live programming 
+languages \cite{live,subtext}, incremental compilation \cite{incremental} and
+partial evaluation \cite{partial}. Wrattler adapts those methods to a notebook environment. 
 
 \section{Summary}
 
@@ -437,8 +442,8 @@ development.
 
 \begin{acks}
 We thank to our colleagues from the AIDA (Artificial Intelligence for data analytics) project
-Chris Williams, Zoubin Ghahramani and Ian Horrocks and also numerous attendees of a recent 
-AIDA workshop in The Alan Turing Institute. This work was in part supported by The Alan Turing 
+Chris Williams, Zoubin Ghahramani and Ian Horrocks and attendees of a recent 
+AIDA workshop. This work was in part supported by The Alan Turing 
 Institute under the EPSRC grant EP/N510129/1.
 \end{acks}
 
