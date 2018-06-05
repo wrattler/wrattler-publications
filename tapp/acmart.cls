@@ -1378,7 +1378,8 @@ Computing Machinery]
   Copyright held by the owner/author(s). Publication rights licensed to
   the Association for Computing Machinery.
   \or % rightsretained
-  Copyright held by the owner/author(s).
+  %Copyright held by the owner/author(s).
+  Copyright remains with the owner/author(s).
   \or % usgov
   \or % usgovmixed
   Association for Computing Machinery.
@@ -1437,9 +1438,9 @@ Computing Machinery]
    for personal or classroom use is granted without fee provided that
    copies are not made or distributed for profit or commercial advantage
    and that copies bear this notice and the full citation on the first
-   page. Copyrights for third-party components of this work must be
-   honored. For all other uses, contact the
-   owner\hspace*{.5pt}/author(s).
+   page. %Copyrights for third-party components of this work must be
+   %honored. For all other uses, contact the
+   %owner\hspace*{.5pt}/author(s).
   \or % usgov
    This paper is authored by an employee(s) of the United States
    Government and is in the public domain. Non-exclusive copying or
@@ -1597,7 +1598,8 @@ Computing Machinery]
        \fi
     \fi
     \if@printcopyright
-      \copyright\ \@copyrightyear\ \@copyrightowner\\
+      %\copyright\ \@copyrightyear\
+       \@copyrightowner\\
     \else
      \@copyrightyear.\
     \fi
