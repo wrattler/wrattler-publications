@@ -5,6 +5,8 @@ report/packages
 report/paket-files
 tapp/packages
 tapp/paket-files
+ai-assistants/packages
+ai-assistants/paket-files
 .fake
 *.aux
 *.log
