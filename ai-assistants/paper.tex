@@ -94,7 +94,7 @@ to the input). Formally:
 \begin{equation*}
 \begin{array}{rcll}
 a &=& \ident{Data} \rightarrow t &\textnormal{(AI assistant)}\\
-t &=& (n_1, p_1, t_1), \ldots (n_k, p_k, e_k, t_k) &\textnormal{(Provided options)}\\
+t &=& (n_1, p_1, e_k, t_1), \ldots (n_k, p_k, e_k, t_k) &\textnormal{(Provided options)}\\
 \mathit{eval} &=& \ident{Data}\times e \rightarrow \ident{Data}&\textnormal{(Evaluator for the DSL)}
 \end{array}
 \end{equation*}
@@ -173,24 +173,24 @@ file (and it will offer its best guesses to the user). In the second level, it w
 the types of the columns. 
 
 The domain-specific language of data cleaning operations consists of two functions named
-$\mathit{range}$ and $\mathit{types}$ that specify the range of data in the file and the types
-of the columns: $\mathit{range}(\mathit{lines}=l_n\ldots l_m, \mathit{cols}=k)$ denotes that
+$\ident{range}$ and $\ident{types}$ that specify the range of data in the file and the types
+of the columns: $\ident{range}(\ident{lines}=l_n\ldots l_m, \ident{cols}=k)$ denotes that
 the data starts on line $l_n$ and ends on line $l_m$ and there are $k$ columns; 
-$\mathit{types}(t_1,\ldots, t_k)$ specifies that the types of the $k$ columns are 
+$\ident{types}(t_1,\ldots, t_k)$ specifies that the types of the $k$ columns are 
 $t_1, \ldots, t_k$. The types are either $\ident{string}$ or $\ident{int}$.
 
 Given the above file as an input, the AI assistant might produce the following tree:
 %
 \begin{equation*}
 \begin{array}{l}
-p=0.9,~ e=\mathit{range}(\mathit{lines}=2\ldots 6, \mathit{cols}=3)\\[0.2em]
-\qquad\longrightarrow p=0.9,~ e=\mathit{range}(\mathit{lines}=2\ldots 6, \mathit{cols}=3); \mathit{types}(\ident{string},\ident{string},\ident{string})\\[0.2em]
-\qquad\longrightarrow p=0.3,~ e=\mathit{range}(\mathit{lines}=2\ldots 6, \mathit{cols}=3); \mathit{types}(\ident{string},\ident{string},\ident{int})\\[0.4em]
-p=0.7,~ e=\mathit{range}(\mathit{lines}=3\ldots 6, \mathit{cols}=3)\\[0.2em]
-\qquad\longrightarrow p=0.8,~ e=\mathit{range}(\mathit{lines}=3\ldots 6, \mathit{cols}=3); \mathit{types}(\ident{string},\ident{string},\ident{int})\\[0.2em]
-\qquad\longrightarrow p=0.7,~ e=\mathit{range}(\mathit{lines}=3\ldots 6, \mathit{cols}=3); \mathit{types}(\ident{string},\ident{string},\ident{string})\\[0.4em]
-p=0.3,~ e=\mathit{range}(\mathit{lines}=1\ldots 6, \mathit{cols}=1)\\[0.2em]
-\qquad\longrightarrow p=0.9,~ e=\mathit{range}(\mathit{lines}=1\ldots 6, \mathit{cols}=1); \mathit{types}(\ident{string})\\[0.2em]
+p=0.9,~ e=\ident{range}(\ident{lines}=2\ldots 6, \ident{cols}=3)\\[0.2em]
+\qquad\longrightarrow p=0.9,~ e=\ident{range}(\ident{lines}=2\ldots 6, \ident{cols}=3); \ident{types}(\ident{string},\ident{string},\ident{string})\\[0.2em]
+\qquad\longrightarrow p=0.3,~ e=\ident{range}(\ident{lines}=2\ldots 6, \ident{cols}=3); \ident{types}(\ident{string},\ident{string},\ident{int})\\[0.4em]
+p=0.7,~ e=\ident{range}(\ident{lines}=3\ldots 6, \ident{cols}=3)\\[0.2em]
+\qquad\longrightarrow p=0.8,~ e=\ident{range}(\ident{lines}=3\ldots 6, \ident{cols}=3); \ident{types}(\ident{string},\ident{string},\ident{int})\\[0.2em]
+\qquad\longrightarrow p=0.7,~ e=\ident{range}(\ident{lines}=3\ldots 6, \ident{cols}=3); \ident{types}(\ident{string},\ident{string},\ident{string})\\[0.4em]
+p=0.3,~ e=\ident{range}(\ident{lines}=1\ldots 6, \ident{cols}=1)\\[0.2em]
+\qquad\longrightarrow p=0.9,~ e=\ident{range}(\ident{lines}=1\ldots 6, \ident{cols}=1); \ident{types}(\ident{string})\\[0.2em]
 \end{array}
 \end{equation*}
 %
@@ -202,13 +202,13 @@ as users. Finally, the third option takes all lines, but then it has to join all
 which is unlikely.
 
 The user can choose the second option, at which point a user interface can evaluate the 
-expression $\mathit{range}(\mathit{lines}=3\ldots 6, \mathit{cols}=3)$ and show a preview of 
+expression $\ident{range}(\ident{lines}=3\ldots 6, \ident{cols}=3)$ and show a preview of 
 the cleaning result. Next, the user has a choice of two ways of inferring types -- the most 
 likely one (and the right one) is that the third column has a type \ident{int} (which means that
 the value {\texttt na} in the last row will be treated as missing).
 
 The resulting expression 
-$\mathit{range}(\mathit{lines}=3\ldots 6, \mathit{cols}=3); \mathit{types}(\ident{string},\ident{string},\ident{int})$
+$\ident{range}(\ident{lines}=3\ldots 6, \ident{cols}=3); \ident{types}(\ident{string},\ident{string},\ident{int})$
 can then be applied to the input data using the $\mathit{eval}$ function, which gives us 
 columns \ident{Name} of type \ident{string}, \ident{City} of type \ident{string}
 and \ident{Count} of type \ident{int} with data:
@@ -221,21 +221,269 @@ and \ident{Count} of type \ident{int} with data:
 \end{array}
 \end{equation*}
 
-\subsection{Datadiff (now)}
+\subsection{Current design of datadiff AI assistant}
 
-\subsection{Datadiff (better)}
+The datadiff project takes two tabular datasets that are in inconsistent formats, but represent
+two sets of observations about the same entity (such as broadband speed in two different years).
+It generates a list of patches that can be applied to one dataset in order to convert it to the
+format used by the second dataset. The patches form a domain-specific language (DSL) of the 
+data transformation suggested by datadiff. A patch $p$ can be one of the following
+(the details are not important for this document, but it provides a nice example of a DSL):
+
+\begin{equation*}
+\begin{array}{lcll}
+p &=& \ident{permute}(\pi) &\textnormal{(Reorder columns using a given permutation)}\\
+  &|& \ident{recode}(i, [s_1\mapsto s_2, \ldots]) &\textnormal{(Recode categorical values using in column $i$)}\\
+  &|& \ident{linear}(i, a, b)&\textnormal{(Apply linear transform $va+b$ to a numerical column $i$)}\\
+  &|& \ident{delete}(i)&\textnormal{(Drop the column at index $i$)}\\
+  &|& \ident{insert}(i, d)&\textnormal{(Insert a new column at index $i$ initialized to values $d$)}
+\end{array}
+\end{equation*}
+%
+The current implementation of datadiff is a non-interactive R package that takes two datasets
+and produces a list of patches. It takes a couple of parameters that specify which patches should
+datadiff attempt to generate (together with various weights to tweak the optimization).
+
+The current datadiff AI assistant as implemnented in Wrattler generates a tree that allows the
+user to select and apply individual patches. The user can review each patch to make sure that it
+is a reasonable transformation. For example, consider the following two datasets:
+
+\vspace{0.5em}
+\begin{minipage}[t]{0.5\textwidth}
+\begin{Verbatim}[numbers=left,xleftmargin=3mm]
+Name, City
+Joe, London
+Jane, Edinburgh
+Jim, London
+\end{Verbatim}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+\begin{Verbatim}[numbers=left,xleftmargin=3mm]
+City, Name, Count
+Cardiff, Alice, 1
+Cardiff, Bob, na
+Edinburgh, Bill, 2
+\end{Verbatim}
+\end{minipage}
+\vspace{1em}
+
+\noindent
+If we ask datadiff for a list of patches to transform the dataset on the right-hand side
+to the format of the dataset on the left-hand side, we might get the following patches
+(assuming columns are indexed from $1$):
+
+\[
+\ident{delete}(3);~ \ident{permute}(2,1);~ \ident{recode}(2, [\textnormal{\sffamily "\hspace{-0.2em}Cardiff\hspace{0.1em}"}\mapsto\textnormal{\sffamily "\hspace{-0.2em}London"}])
+\]
+
+\noindent
+Datadiff correctly infers that we need to drop the newly added {\ttfamily Count} column and that
+the order of {\ttfamily Name} and {\ttfamily City} has been switched. It might also suggest that
+{\ttfamily City} is a categorical column where the encoding has been changed, which is not the 
+case here (but this would be a reasonable guess if one dataset contained values ``true'' and ``false''
+while the other contained ``yes'' and ``no'').
+
+The datadiff AI assistant generates the following tree based on the three inferred patches 
+(we omit the parameters of the patches):
+%
+\begin{equation*}
+\begin{array}{l}
+p=0.9,~ e=\ident{delete}(\ldots)\\[0.2em]
+\qquad\longrightarrow p=0.9,~ \ident{delete}(\ldots); \ident{permute}(\ldots)\\[0.2em]
+\qquad\qquad\longrightarrow p=0.6,~ \ident{delete}(\ldots); \ident{permute}(\ldots); \ident{recode}(\ldots)\\[0.2em]
+\qquad\longrightarrow p=0.6,~ \ident{delete}(\ldots); \ident{recode}(\ldots)\\[0.2em]
+\qquad\qquad\longrightarrow p=0.9,~ \ident{delete}(\ldots); \ident{recode}(\ldots); \ident{permute}(\ldots)\\[0.4em]
+p=0.8,~ e=\ident{permute}(\ldots)\\[0.2em]
+\qquad\longrightarrow p=0.9,~ \ident{permute}(\ldots); \ident{delete}(\ldots)\\[0.2em]
+\qquad\qquad\longrightarrow p=0.6,~ \ident{permute}(\ldots); \ident{delete}(\ldots); \ident{recode}(\ldots)\\[0.2em]
+\qquad\longrightarrow p=0.6,~ \ident{permute}(\ldots); \ident{recode}(\ldots)\\[0.2em]
+\qquad\qquad\longrightarrow p=0.9,~ \ident{permute}(\ldots); \ident{recode}(\ldots); \ident{delete}(\ldots)\\[0.4em]
+(\ldots)
+\end{array}
+\end{equation*}
+
+At the first level, the user can choose one of the three patches (we only show sub-trees for the first two). 
+The patches are sorted by their likelihood and so \ident{delete} is offered before \ident{permute}. In the
+second level, the user can choose one of the remaining patches. Assuming the user follows the first
+branch and chooses \ident{delete}, they can now choose to apply \ident{permute} or \ident{recode} (the
+first option being more likely). In the last third level, the AI assistant offers the remaining patch. 
+However, the user can stop before reaching the leaf and choose just
+$\ident{delete}(3);~ \ident{permute}(2,1)$ as the final data cleaning script. As before, Wrattler 
+can use the \emph{eval} function to give previews of the transformed datasets while the user is 
+navigating through the tree.
+
+\subsection{Alternative design of datadiff AI assistant}
+
+The current design of the datadiff AI assistant is not optimal, because it performs a global
+optimization up-front and then merely allows the user to choose some of the patches. This is 
+problematic, because the global optimization can be slow and it does not use the user input to 
+improve the results. 
+
+For example, if the user could specify that a certain column should not be
+recoded, datadiff could run the global optimization taking this constraint into account and, say,
+match and reorder columns differently (this is currently not possible, because the current version
+runs the global optimization once up-front and then merely offers a choice of produced patches).
+
+An alternative datadiff AI assistant would generate expressions in the same domain-specific 
+language as the current one (list of patches $p$). However, the tree would be generated and 
+structured differently. This could be done by maintaining a list of constraints and generating
+the best possible patch given certain constraints, together with a choice of most likely constraints
+the user might want to add. A constraint $c$ would be as follows:
+%
+\begin{equation*}
+\begin{array}{lcll}
+c &=& \ident{norecode}(i) &\textnormal{(Values in a categorical column $i$ should not be recoded)}\\
+  &|& \ident{notransform}(i)&\textnormal{(Values in a numerical column $i$ should not be transformed)}\\
+  &|& \ident{nodelete}(i)&\textnormal{(Column $i$ should not be deleted)}\\
+  &|& \ident{match}(i,j)&\textnormal{(Column $i$ should be mapped to sample column $j$)}
+\end{array}
+\end{equation*}
+%
+The first three constraints specify that certain patches should not be generated. The last one is
+more interesting as it allows the user to explicitly give a mapping for a column (but unless other
+constraints are given, datadiff can still attempt to transform or recode the column to get a 
+better match). This is likely not a complete set of constraints, but it is sufficient to illustrate
+the idea.
+
+The AI assistant would then implement a function that takes two datasets together with a set of 
+constraints and generates a cleaning script together with a list of constraints (sorted by their
+likelihood) that the user might want to add. (If we allowed nodes with open-ended options, the
+user could write an arbitrary constraint, but for now, we just assume that the AI assistant can
+generate all sensible options.)
+
+Using the above function, we can produce a tree as follows. We start with an empty set of 
+constraints $C=\{\}$ and call the function to obtain a data cleaning DSL expression $e$ and
+potential constraints $c_1, \ldots, c_k$. For each constraint, we add it to the set $C$ and
+generate a sub-tree by calling the AI assistant function recursively. In other words, following
+a path through the tree would add more and more constraints to the set $C$ and each node will
+come with the best DSL expression that datadiff can generate under the constraints determined
+by the path taken through the tree. The following illustrates (a small part of) the tree that 
+the revised AI assistant for datadiff would generate for the above two files. (In addition to a DSL 
+expression $e$ and likelihood $p$, we also include a set of constriants $C$ associated with each 
+node):
+%
+\begin{equation*}
+\begin{array}{l}
+C=[], p=1,~ e=\ident{delete}(\ldots);~ \ident{permute}(\ldots);~ \ident{recode}(\ldots)\\
+\qquad\longrightarrow C=[\ident{norecode}(2)], p=0.4, e=\ident{delete}(\ldots);~ \ident{permute}(\ldots);\\
+\qquad\qquad\longrightarrow C=[\ident{norecode}(2); \ident{nodelete}(3)], p=0.2, e=(\ldots)\\
+\qquad\longrightarrow C=[\ident{nodelete}(3)], p=0.2, e=\ident{delete}(\ldots);~ \ident{permute}(\ldots);~ \ident{recode}(\ldots)\\
+\qquad\longrightarrow C=[\ident{match}(1,1)], p=0.4, e=\ident{delete}(\ldots);~ \ident{permute}(\ldots);~ \ident{recode}(\ldots)\\
+\qquad\longrightarrow C=[\ident{match}(1,2)], p=0.8, e=\ident{delete}(\ldots);~ \ident{permute}(\ldots);~ \ident{recode}(\ldots)\\
+\end{array}
+\end{equation*}
+%
+The tree has only one root node which was generated without any constraints. The generated expression
+is the best guess by datadiff, which drops the {\texttt Count} column, rearranges columns and recodes
+(incorrectly) the {\texttt City} column. The nodes at the second level allow the user to add a
+number of constraints. 
+
+The first two sub-nodes prevent datadiff from generating two patches that it employed. The first one
+disallows recoding the column {\texttt City}. The resulting expression drops {\texttt Count} and
+rearranges the columns, which is the result we were hoping to obtain. 
+The second sub-node disallows deleting the {\texttt Count} node. In this case, datadiff has to
+find other ways of reconcilling the data sets, perhaps by recoding {\texttt Code} and dropping
+another column. Finally, the last two sub-nodes allow us to explicitly specify a mapping between
+columns. The listing only shows the first two (map column $1$ to column $1$; map column $1$ to column $2$),
+but the AI assistant would likely generate the full range, sorted by likelihood.
 
 \section{Evaluating AI assistants}
 
-\subsection{Overall}
-Following the best probability, we get the best result 
-(this is equivalent to running a function)
+When building an AI assistant, we want to be able to evaluate how good it is. For an AI tool that 
+is implemented as a data cleaning function, we can run it on sample inputs and asses how good 
+the resulting outputs are. (Even this is not so simple, but we might know what the optimal results 
+look like for some inputs, or we could generate inputs by introducing errors into clean datasets 
+and see if those were eliminated.)
 
-\subsection{Interactivity}
+The situation with AI assistants is more complicated as they are interactive and aim to produce
+cleaning scripts that humans can understand. We could evaluate AI assistants using user studies 
+(and this would be, no doubt, worthwhile), but there are a couple of things that we can say about
+AI assistants in a formal way too.
 
-Imagine there are some annomalies that we cannot detect.
-Does the AI assistant provide an easy way for the user to address them?
+\subsection{Evaluating AI assistant in an automatic way}
+First of all, we can treat an AI assistant as a fully automatic tool. To do this, we automatically
+choose the most likely option provided by the AI assistant until we reach a leaf node (or, perhaps,
+until we reach a case where the sub-node has a likelihood $p\leq 0.5$).
 
+More formally, given a dataset $d$ and an AI assistant $a$ (as defined on page 2), we run the 
+AI assistant $a(d)$ to obtain a list of options $(n_1, p_1, e_k, t_1), \ldots (n_k, p_k, e_k, t_k)$.
+We choose the most likely node $(n_i, p_i, e_i, t_i)$ (i.e. $p_i \geq p_j$ for all $j$). If 
+$t_i$ is empty or the likelihoods of all options inside $t_i$ are less than $0.5$, we return
+an expression $e_i$; otherwise, we recursively follow the sub-tree $t_i$. Finally, we evaluate
+the resulting data cleaning expression using $\mathit{eval}(d, e_i)$ and asses how good the 
+cleaned data set is using whatever methods we would use for an automatic cleaning function.
 
+This way, we can guarantee that the interactive AI assistant is as good as an automatic cleaning 
+function would be. This is a reasonable baseline test, but it does not tell us much about how
+good the interactive aspects are.
+
+\subsection{Evaluating interactivity for annomaly handling}
+
+One of the motivations for the idea of AI assistants was that real-world data cleaning tasks
+often have ad-hoc issues that require some form of manual intervention. In other words, the 
+file might have an annomaly that a human can spot, but that an automatic data cleaning algorithm
+would miss. For example, consider the following two CSV files:
+
+\vspace{0.5em}
+\begin{minipage}[t]{0.5\textwidth}
+\begin{Verbatim}[numbers=left,xleftmargin=3mm]
+Name, Count, ID
+Jim, 45, 1
+Jane, 52, 2
+Joe, 67, 3
+\end{Verbatim}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+\begin{Verbatim}[numbers=left,xleftmargin=3mm]
+Name, Code, Value
+Alice, 35, 4
+Bill, 38, 5
+Bob, 42, 6
+\end{Verbatim}
+\end{minipage}
+\vspace{1em}
+
+\noindent
+As humans, we can see that the column {\texttt ID} should be aligned with {\texttt Code}
+and {\texttt Count} should likely match {\texttt Value}. However, unless the AI assistant
+considers possible meanings of the file headers, it has no way of discovering this. 
+
+We might call such annomalies \emph{adversary annomaly}. There is very likely no way of 
+characterising adversary annomalies in general for all AI assistants, but it should be possible
+to characterise them for concrete data wrangling problems. Examples might include rows that
+are not outliers in the statistical sense, textual values that have the right format, but wrong 
+meaning such as ``Refugee Olympic Athletes'' among the names of countries\footnote{This is a name
+for an actual team of 10 athletes competing in the 2016 Rio Olympic games.}, or a suspicious 
+numerical value such as $123.45678$ in a numerical column with values 
+$190.52136, 58.68297, 123.45678, 67.47067, 47.69846$.
+
+An important quality of an AI assistant is tht it makes it possible to eliminate adversary
+annomalies with a small number of interactions, ideally just by choosing an appropriate 
+non-default offered option at one point when traversing the tree. For example, given the
+above example, the alternative datadiff AI assistant would allow us to choose a tree node that
+adds a constraint $\ident{match}(2,3)$ and we would get the correct result with just one manual
+intervention (the other column would be reordered automatically).
+
+To summarise, we want to be able to claim that an AI assistant makes it easy to handle ad-hoc
+corner cases that are not discovered by the machine learning algorithm behind it. To do this,
+we introduce adversary annomalies into the data -- those are plausible real-world data annomalies 
+that are not discovered by the algorithm emplyed by the AI assistant. A good AI assistant allows
+the user to eliminate these with a minimal number of interactions, i.e.~choices of other than
+the most likely nodes in the tree. 
+
+\subsection{Easy discoverability of best results}
+
+Finally, the current integration for AI assistants in Wrattler exposes the tree through a
+user interface. The user calls the AI assistant and then chooses a sub-tree to explore 
+(by typing `.' and choosing one of the options in a drop-down menu). This means that it is
+desirable to make the most likely result (domain-specific language expression) closer to the
+root rather than somewhere deep in the tree.
+
+As an example, consider the two designs of the datadiff assistant. In the first design, the
+user has to manually accept all the desired patches. If the optimal patch needs to drop 15
+extra columns from a dataset, the user will have to make 15 choices explicitly. The
+second design of the datadiff assistant is better because the most likely set of patches
+is available immediately in the root node (and users only need to continue exploring a
+sub-tree if they need to address an adversary annomaly).
 
 \end{document}
